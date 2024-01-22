@@ -17,4 +17,4 @@ const db = getFirestore(firebaseApp);
 const posts = collection(db, "posts");
 const tags = collection(db, "tags");
 
-export { posts, tags };
+export { posts, tags, db };
