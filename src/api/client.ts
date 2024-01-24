@@ -5,13 +5,13 @@ import {
   addDoc,
   setDoc,
   deleteDoc,
-  Query,
+  CollectionReference,
 } from "@firebase/firestore";
 
 import { db } from "../plugins/firebase";
 
-export const Client = () => ({
-  $get: async ({ id, path }: { id: string; path: string }) => {
+const Client = () => ({
+  $get: async ({ id, path }: { id: string; path: string }): Promise<any> => {
     try {
       const docRef = doc(db, path, id);
       const docSnap = await getDoc(docRef);
@@ -19,16 +19,16 @@ export const Client = () => ({
       if (docSnap.exists()) {
         return docSnap.data();
       } else {
-        return Error();
+        throw Error();
       }
     } catch (error) {
       console.error("@client.ts::Client.$get", error);
     }
   },
-  $list: async ({ query }: { query: Query }) => {
+  $list: async (collection: CollectionReference): Promise<any> => {
     try {
       const data: Array<object> = [];
-      const snapshot = await getDocs(query);
+      const snapshot = await getDocs(collection);
 
       snapshot.forEach((doc) => {
         const item = {
@@ -44,7 +44,32 @@ export const Client = () => ({
       console.error("@client.ts::Client.$list", error);
     }
   },
-  $create: async () => {},
-  $mutate: async () => {},
-  $delete: async () => {},
+  $create: async ({
+    collection,
+    payload,
+  }: {
+    collection: CollectionReference;
+    payload: {};
+  }) => {
+    try {
+      const docRef = await addDoc(collection, payload);
+
+      return {
+        status: "created",
+        id: docRef.id,
+      };
+    } catch (error) {
+      console.error("@client.ts::Client.$create", error);
+    }
+  },
+  $mutate: async () => {
+    try {
+    } catch (error) {}
+  },
+  $delete: async () => {
+    try {
+    } catch (error) {}
+  },
 });
+
+export default Client;
