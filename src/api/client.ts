@@ -6,12 +6,27 @@ import {
   setDoc,
   deleteDoc,
   CollectionReference,
+  DocumentData,
 } from "@firebase/firestore";
 
 import { db } from "../plugins/firebase";
 
-const Client = () => ({
-  $get: async ({ id, path }: { id: string; path: string }): Promise<any> => {
+type Client = {
+  $get: ({ id, path }: { id: string; path: string }) => Promise<DocumentData>;
+  $list: (collection: CollectionReference) => Promise<DocumentData[]>;
+  $create: ({
+    collection,
+    data,
+  }: {
+    collection: CollectionReference;
+    data: Object;
+  }) => Promise<{ status: string; id: string }>;
+  $mutate: {};
+  $delete: {};
+};
+
+const Client = (): Client => ({
+  $get: async ({ id, path }) => {
     try {
       const docRef = doc(db, path, id);
       const docSnap = await getDoc(docRef);
@@ -19,20 +34,20 @@ const Client = () => ({
       if (docSnap.exists()) {
         return docSnap.data();
       } else {
-        throw Error();
+        throw Error("Snapshot is missing.");
       }
     } catch (error) {
-      console.error("@client.ts::Client.$get", error);
+      throw Error(`@client.ts::Client.$get ${error}`);
     }
   },
-  $list: async (collection: CollectionReference): Promise<any> => {
+  $list: async (collection) => {
     try {
-      const data: Array<object> = [];
+      const data: DocumentData[] = [];
       const snapshot = await getDocs(collection);
 
       snapshot.forEach((doc) => {
-        const item = {
-          ...(doc.data() as object),
+        const item: { id: string } = {
+          ...doc.data(),
           id: doc.id,
         };
 
@@ -41,25 +56,19 @@ const Client = () => ({
 
       return data;
     } catch (error) {
-      console.error("@client.ts::Client.$list", error);
+      throw Error(`@client.ts::Client.$list ${error}`);
     }
   },
-  $create: async ({
-    collection,
-    payload,
-  }: {
-    collection: CollectionReference;
-    payload: {};
-  }) => {
+  $create: async ({ collection, data }) => {
     try {
-      const docRef = await addDoc(collection, payload);
+      const docRef = await addDoc(collection, data);
 
       return {
         status: "created",
         id: docRef.id,
       };
     } catch (error) {
-      console.error("@client.ts::Client.$create", error);
+      throw Error(`@client.ts::Client.$create ${error}`);
     }
   },
   $mutate: async () => {
