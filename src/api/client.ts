@@ -21,8 +21,16 @@ type Client = {
     collection: CollectionReference;
     data: Object;
   }) => Promise<{ status: string; id: string }>;
-  $mutate: {};
-  $delete: {};
+  $mutate: ({
+    path,
+    id,
+    data,
+  }: {
+    path: string;
+    id: string;
+    data: Object;
+  }) => void;
+  $delete: ({ path, id }: { path: string; id: string }) => void;
 };
 
 const Client = (): Client => ({
@@ -71,13 +79,23 @@ const Client = (): Client => ({
       throw Error(`@client.ts::Client.$create ${error}`);
     }
   },
-  $mutate: async () => {
+  $mutate: async ({ path, id, data }) => {
     try {
-    } catch (error) {}
+      const docRef = doc(db, path, id);
+
+      await setDoc(docRef, data);
+    } catch (error) {
+      throw Error(`@client.ts::Client.$mutate ${error}`);
+    }
   },
-  $delete: async () => {
+  $delete: async ({ path, id }) => {
     try {
-    } catch (error) {}
+      const docRef = doc(db, path, id);
+
+      await deleteDoc(docRef);
+    } catch (error) {
+      throw Error(`@client.ts::Client.$delete ${error}`);
+    }
   },
 });
 
