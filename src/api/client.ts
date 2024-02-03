@@ -34,7 +34,7 @@ type Client = {
 };
 
 const Client = (): Client => ({
-  $get: async ({ id, path }) => {
+  $get: async ({ path, id }) => {
     try {
       const docRef = doc(db, path, id);
       const docSnap = await getDoc(docRef);
@@ -54,7 +54,7 @@ const Client = (): Client => ({
       const snapshot = await getDocs(collection);
 
       snapshot.forEach((doc) => {
-        const item: { id: string } = {
+        const item = {
           ...doc.data(),
           id: doc.id,
         };
