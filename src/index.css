@@ -9,3 +9,7 @@ body {
 h1 {
   @apply text-3xl;
 }
+
+label {
+  @apply font-bold text-sm;
+}

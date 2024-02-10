@@ -25,9 +25,7 @@ const Input = ({
 }: Props) => {
   return (
     <div className="flex flex-col gap-y-1">
-      <label htmlFor={id} className="font-bold text-sm">
-        {label}
-      </label>
+      <label htmlFor={id}>{label}</label>
       <input
         id={id}
         name={name}
