@@ -7,7 +7,15 @@ body {
 }
 
 h1 {
-  @apply text-3xl;
+  @apply text-3xl font-semibold;
+}
+
+h3 {
+  @apply text-lg font-semibold;
+}
+
+p {
+  @apply text-base;
 }
 
 label {

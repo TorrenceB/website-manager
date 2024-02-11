@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
-import { Button, Plus } from "../components";
 import { Link } from "react-router-dom";
-import { posts } from "../plugins/firebase";
-import Client from "../api/client";
 import { DocumentData } from "firebase/firestore";
+
+import { Button, Plus, PostCard } from "../components";
+import { posts } from "../plugins/firebase";
+
+import Client from "../api/client";
 
 const client = Client();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<DocumentData[]>([]);
 
-  const fetchPosts = async (): Promise<void> => {
-    const all = await client.$list(posts);
+  const fetch = async (): Promise<void> => {
+    const data = await client.$list(posts);
 
-    setBlogPosts(all);
+    setBlogPosts(data);
   };
 
   useEffect(() => {
-    fetchPosts();
+    fetch();
   }, []);
 
   return (
@@ -30,6 +32,17 @@ const Posts = () => {
           <Plus />
         </Button>
       </Link>
+
+      {blogPosts && blogPosts?.length > 0
+        ? blogPosts.map((post) => (
+            <PostCard
+              key={post.id}
+              title={post.title}
+              body={post.body}
+              tags={post.tags}
+            />
+          ))
+        : "There are no posts"}
     </div>
   );
 };
