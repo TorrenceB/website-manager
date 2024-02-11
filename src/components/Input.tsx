@@ -33,7 +33,7 @@ const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="p-2 bg-gray-200 rounded shadow w-full focus:ouline-none leading-tight"
+        className="p-2 rounded shadow w-full focus:ouline-none leading-tight"
       />
       {hasError && (
         <p className="text-red-500 text-xs font-bold">{errorMessage}</p>

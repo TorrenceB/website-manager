@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import "bytemd/dist/index.css";
 
-const MarkdownEditor = () => {
+const MarkDown = () => {
   const [value, setValue] = useState("");
 
   return (
@@ -14,4 +14,4 @@ const MarkdownEditor = () => {
   );
 };
 
-export default MarkdownEditor;
+export default MarkDown;

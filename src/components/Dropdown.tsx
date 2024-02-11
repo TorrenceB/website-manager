@@ -11,8 +11,8 @@ const Dropdown = ({ options, label, id }: Props) => {
     <div className="flex flex-col gap-1 w-full">
       <label htmlFor={id}>{label}</label>
 
-      <div className="w-full flex bg-gray-200 rounded p-2">
-        <select id={id} className="appearance-none bg-gray-200 w-full">
+      <div className="w-full flex bg-light-gray rounded p-2 shadow">
+        <select id={id} className="appearance-none w-full">
           {options.map((option) => (
             <option>{option}</option>
           ))}

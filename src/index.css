@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  margin: auto 0;
+  @apply bg-dark-indigo text-light-gray m-auto;
 }
 
 h1 {
@@ -12,4 +12,13 @@ h1 {
 
 label {
   @apply font-bold text-sm;
+}
+
+input,
+select {
+  @apply bg-light-gray;
+}
+
+.bytemd {
+  @apply bg-light-gray rounded;
 }
