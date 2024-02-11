@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { Home, CreatePost } from "../pages";
+import { Posts, CreatePost } from "../pages";
 
-const home = {
-  path: "/",
-  element: <Home />,
+const posts = {
+  path: "/posts",
+  element: <Posts />,
 };
 const createPost = {
   path: "/create-post",
   element: <CreatePost />,
 };
 
-const routes = [home, createPost];
+const routes = [posts, createPost];
 
 export default createBrowserRouter(routes);
