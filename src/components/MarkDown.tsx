@@ -1,15 +1,17 @@
 import { Editor } from "@bytemd/react";
-import { useState } from "react";
 
 import "bytemd/dist/index.css";
 
-const MarkDown = () => {
-  const [value, setValue] = useState("");
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
 
+const MarkDown = ({ value, onChange }: Props) => {
   return (
     <div>
-      <label>Create Post</label>
-      <Editor value={value} onChange={(value) => setValue(value)} />
+      <label>Post</label>
+      <Editor value={value} onChange={onChange} />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import { useState, ChangeEvent } from "react";
-import { MarkDown, Input, Dropdown } from "../components";
+import { MarkDown, Input, Dropdown, Button } from "../components";
 
-const AddPost = () => {
+const CreatePost = () => {
   const [title, setTitle] = useState("");
+  const [markdown, setMarkdown] = useState("");
   const [options, setOptions] = useState([]);
   const [errors, setErrors] = useState({});
 
@@ -21,9 +22,10 @@ const AddPost = () => {
         }}
       />
       <Dropdown id="tags" label="Tags" options={options} />
-      <MarkDown />
+      <MarkDown value={markdown} onChange={(value) => setMarkdown(value)} />
+      <Button>Create</Button>
     </form>
   );
 };
 
-export default AddPost;
+export default CreatePost;
