@@ -39,6 +39,7 @@ const Posts = () => {
               key={post.id}
               title={post.title}
               body={post.body}
+              timestamp={post.timeStamp}
               tags={post.tags}
             />
           ))
