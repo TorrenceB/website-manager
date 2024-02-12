@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DocumentData } from "firebase/firestore";
 
-import { Button, Plus, PostCard } from "../components";
+import { Button, PostCard, Icon } from "../components";
 import { posts } from "../plugins/firebase";
 
 import Client from "../api/client";
+import { Icons } from "../assets/json";
 
 const client = Client();
 
@@ -29,7 +30,7 @@ const Posts = () => {
       <Link to={"/create-post"}>
         <Button>
           Create Post
-          <Plus />
+          <Icon icon={Icons["plus"]} />
         </Button>
       </Link>
 
