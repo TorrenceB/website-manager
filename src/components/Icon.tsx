@@ -10,8 +10,8 @@ const Icon = ({
   color = "#474787",
   size = "w-5 h-5",
   classes = "",
-}: Props) => {
-  const paths = icon.map((d) => <path key={d} d={d} fill="black" />);
+}: Props): JSX.Element => {
+  const paths = icon.map((d) => <path key={d} d={d} />);
 
   return (
     <svg

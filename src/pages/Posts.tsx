@@ -6,7 +6,7 @@ import { Button, PostCard, Icon } from "../components";
 import { posts } from "../plugins/firebase";
 
 import Client from "../api/client";
-import { Icons } from "../assets/json";
+import { Icons } from "../assets/data";
 
 const client = Client();
 
