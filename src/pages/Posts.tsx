@@ -8,7 +8,7 @@ import { posts } from "../plugins/firebase";
 import Client from "../api/client";
 import { Icons } from "../assets/data";
 
-const client = Client();
+const client: Client = Client();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<DocumentData[]>([]);
@@ -38,7 +38,7 @@ const Posts = () => {
       : "There are no posts";
 
   return (
-    <div className="grid justify-center gap-y-4 p-4 w-full">
+    <div className="flex flex-col justify-center gap-y-4 p-4 w-full">
       <h1>Blog Management</h1>
 
       <Link to={"/create-post"}>

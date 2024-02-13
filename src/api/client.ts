@@ -12,7 +12,7 @@ import {
 import { db } from "../plugins/firebase";
 
 type Client = {
-  $get: ({ id, path }: { id: string; path: string }) => Promise<DocumentData>;
+  $get: ({ path, id }: { path: string; id: string }) => Promise<DocumentData>;
   $list: (collection: CollectionReference) => Promise<DocumentData[]>;
   $create: ({
     collection,

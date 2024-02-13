@@ -7,7 +7,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const MarkDown = ({ value, onChange }: Props) => {
+const Markdown = ({ value, onChange }: Props) => {
   return (
     <div>
       <label>Post</label>
@@ -16,4 +16,4 @@ const MarkDown = ({ value, onChange }: Props) => {
   );
 };
 
-export default MarkDown;
+export default Markdown;
