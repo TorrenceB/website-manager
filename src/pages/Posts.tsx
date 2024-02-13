@@ -23,6 +23,19 @@ const Posts = () => {
     fetch();
   }, []);
 
+  const buildPosts =
+    blogPosts && blogPosts?.length > 0
+      ? blogPosts.map((post) => (
+          <PostCard
+            key={post.id}
+            title={post.title}
+            body={post.body}
+            timestamp={post.timeStamp}
+            tags={post.tags}
+          />
+        ))
+      : "There are no posts";
+
   return (
     <div className="grid justify-center gap-y-4 p-4 w-full">
       <h1>Blog Management</h1>
@@ -30,21 +43,11 @@ const Posts = () => {
       <Link to={"/create-post"}>
         <Button>
           Create Post
-          <Icon icon={Icons["plus"]} />
+          <Icon icon={Icons.plus} />
         </Button>
       </Link>
 
-      {blogPosts && blogPosts?.length > 0
-        ? blogPosts.map((post) => (
-            <PostCard
-              key={post.id}
-              title={post.title}
-              body={post.body}
-              timestamp={post.timeStamp}
-              tags={post.tags}
-            />
-          ))
-        : "There are no posts"}
+      {buildPosts}
     </div>
   );
 };

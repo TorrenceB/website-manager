@@ -1,4 +1,5 @@
-import { Chevron } from "./index";
+import { Icon } from "./index";
+import { Icons } from "../assets/data";
 
 interface Props {
   options: string[];
@@ -17,7 +18,7 @@ const Dropdown = ({ options, label, id }: Props) => {
             <option>{option}</option>
           ))}
         </select>
-        <Chevron />
+        <Icon icon={Icons.chevron} />
       </div>
     </div>
   );

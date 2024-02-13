@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
-import { Button, Trash, Pencil } from "./index";
+import { Button, Icon } from "./index";
+import { Icons } from "../assets/data";
 import { useFirebaseDate } from "../hooks";
 
 interface Props {
@@ -34,11 +35,11 @@ const PostCard = ({ title, body, timestamp, tags }: Props) => {
       <div className="flex gap-2">
         <Button>
           Edit
-          <Pencil />
+          <Icon icon={Icons.pencil} />
         </Button>
         <Button>
           Delete
-          <Trash />
+          <Icon icon={Icons.trash} />
         </Button>
       </div>
     </div>

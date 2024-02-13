@@ -3,8 +3,4 @@ export { default as Input } from "./Input";
 export { default as Dropdown } from "./Dropdown";
 export { default as Button } from "./Button";
 export { default as PostCard } from "./PostCard";
-export { default as Chevron } from "./Chevron";
-export { default as Plus } from "./Plus";
 export { default as Icon } from "./Icon";
-export { default as Trash } from "./Trash";
-export { default as Pencil } from "./Pencil";
