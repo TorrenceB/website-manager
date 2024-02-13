@@ -1,19 +1,11 @@
-import { Timestamp } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 import { Button, Icon } from "./index";
 import { Icons } from "../assets/data";
 import { useFirebaseDate } from "../hooks";
+import { Post } from "../types";
 
-interface Props {
-  id: string;
-  title: string;
-  body: string;
-  timestamp: Timestamp;
-  tags: { id: string; title: string }[];
-}
-
-const PostCard = ({ id, title, body, timestamp, tags }: Props) => {
+const PostCard = ({ id, title, body, timestamp, tags }: Post) => {
   const date = useFirebaseDate(timestamp);
 
   const buildTags = tags.map((tag) => (
