@@ -27,6 +27,7 @@ const Posts = () => {
     blogPosts && blogPosts?.length > 0
       ? blogPosts.map((post) => (
           <PostCard
+            id={post.id}
             key={post.id}
             title={post.title}
             body={post.body}

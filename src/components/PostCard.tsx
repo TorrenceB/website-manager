@@ -1,18 +1,19 @@
 import { Timestamp } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 import { Button, Icon } from "./index";
 import { Icons } from "../assets/data";
 import { useFirebaseDate } from "../hooks";
 
 interface Props {
-  id?: string;
+  id: string;
   title: string;
   body: string;
   timestamp: Timestamp;
   tags: { id: string; title: string }[];
 }
 
-const PostCard = ({ title, body, timestamp, tags }: Props) => {
+const PostCard = ({ id, title, body, timestamp, tags }: Props) => {
   const date = useFirebaseDate(timestamp);
 
   const buildTags = tags.map((tag) => (
@@ -33,10 +34,12 @@ const PostCard = ({ title, body, timestamp, tags }: Props) => {
 
       <p className="max-h-32 overflow-hidden">{body}</p>
       <div className="flex gap-2">
-        <Button>
-          Edit
-          <Icon icon={Icons.pencil} />
-        </Button>
+        <Link to={`/update-post/${id}`} className="w-full">
+          <Button>
+            Edit
+            <Icon icon={Icons.pencil} />
+          </Button>
+        </Link>
         <Button>
           Delete
           <Icon icon={Icons.trash} />
