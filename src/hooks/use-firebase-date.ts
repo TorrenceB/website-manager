@@ -8,7 +8,7 @@ const useFirebaseDate = (timestamp: Timestamp) => {
     setDate(timestamp.toDate().toDateString());
   }, []);
 
-  return [date];
+  return date;
 };
 
 export default useFirebaseDate;

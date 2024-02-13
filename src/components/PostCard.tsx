@@ -13,7 +13,7 @@ interface Props {
 }
 
 const PostCard = ({ title, body, timestamp, tags }: Props) => {
-  const [date] = useFirebaseDate(timestamp);
+  const date = useFirebaseDate(timestamp);
 
   const buildTags = tags.map((tag) => (
     <div
