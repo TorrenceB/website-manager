@@ -24,7 +24,7 @@ label {
 
 input,
 select {
-  @apply bg-light-gray;
+  @apply bg-light-gray text-black;
 }
 
 .bytemd {

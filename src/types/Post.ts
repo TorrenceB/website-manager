@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export default interface Post {
-  id: String;
+  id: string;
   title: string;
   body: string;
   tags: { id: string; title: string }[];

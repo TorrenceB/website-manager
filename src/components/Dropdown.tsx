@@ -15,7 +15,7 @@ const Dropdown = ({ options, label, id }: Props) => {
       <div className="w-full flex bg-light-gray rounded p-2 shadow">
         <select id={id} className="appearance-none w-full">
           {options.map((option) => (
-            <option>{option}</option>
+            <option key={option}>{option}</option>
           ))}
         </select>
         <Icon icon={Icons.chevron} />
