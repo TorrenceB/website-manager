@@ -4,11 +4,18 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { Markdown, Input, Dropdown, Button } from "../components";
 import { Post } from "../types";
 import Client from "../api/client";
+import { Timestamp } from "firebase/firestore";
 
 const client: Client = Client();
 
 const UpdatePost = () => {
-  const [post, setPost] = useState<Post>({} as Post);
+  const [post, setPost] = useState<Post>({
+    id: "",
+    title: "",
+    body: "",
+    tags: [],
+    timestamp: new Timestamp(0, 0),
+  });
   const [tags, setTags] = useState<string[]>([]);
   const { id = "" } = useParams<string>();
 
@@ -39,7 +46,7 @@ const UpdatePost = () => {
         }}
       />
       <Dropdown id="tags" label="Tags" options={tags} />
-      {/* <Markdown value={post.body} onChange={() => {}} /> */}
+      <Markdown value={post.body} onChange={() => {}} />
       <Button>Update</Button>
     </form>
   );
