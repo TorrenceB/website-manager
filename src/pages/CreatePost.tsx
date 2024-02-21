@@ -3,7 +3,7 @@ import { DocumentData, Timestamp } from "firebase/firestore";
 
 import { Markdown, Input, Dropdown, Button } from "../components";
 import Client from "../api/client";
-import { tags } from "../plugins/firebase";
+import { tags, posts } from "../plugins/firebase";
 import { Post } from "../types";
 
 const client = Client();
@@ -26,11 +26,17 @@ const CreatePost = () => {
     setAllTags(data);
   };
 
-  const create = async () => {
-    // const response = await client.$create({});
+  const create = async (): Promise<void> => {
+    const response = await client.$create({ collection: posts, data: post });
+
+    console.log("RESPONSE =>", response);
   };
 
-  useEffect(() => {}, []);
+  const options = allTags.map(({ title }) => title);
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
 
   return (
     <form className="flex flex-col gap-y-4">
@@ -46,12 +52,23 @@ const CreatePost = () => {
           setPost({ ...post, title: value });
         }}
       />
-      <Dropdown id="tags" label="Tags" options={[]} />
+      <Dropdown
+        id="tags"
+        label="Tags"
+        onSelect={(value) => {
+          const selectedTag = allTags.find((tag) => tag.title === value);
+
+          console.log("Selected =>", selectedTag);
+
+          // setPost({...post, tags: [selectedTag]})
+        }}
+        options={options}
+      />
       <Markdown
         value={post.body}
         onChange={(value) => setPost({ ...post, body: value })}
       />
-      <Button>Create</Button>
+      <Button onClick={create}>Create</Button>
     </form>
   );
 };

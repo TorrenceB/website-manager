@@ -45,7 +45,12 @@ const UpdatePost = () => {
           setPost({ ...post, title: value });
         }}
       />
-      <Dropdown id="tags" label="Tags" options={tags} />
+      <Dropdown
+        id="tags"
+        label="Tags"
+        onSelect={(value) => console.log("Selected =>", value)}
+        options={tags}
+      />
       <Markdown value={post.body} onChange={() => {}} />
       <Button>Update</Button>
     </form>
