@@ -1,10 +1,10 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { DocumentData, Timestamp } from "firebase/firestore";
 
-import { Markdown, Input, Dropdown, Button } from "../components";
+import { Markdown, Input, ChipGroup, Button } from "../components";
 import Client from "../api/client";
 import { tags, posts } from "../plugins/firebase";
-import { Post } from "../types";
+import { Post, Tag } from "../types";
 
 const client = Client();
 
@@ -18,6 +18,7 @@ const CreatePost = () => {
   });
 
   const [allTags, setAllTags] = useState<DocumentData[]>([]);
+  const [newTag, setNewTag] = useState("");
   const [errors, setErrors] = useState({});
 
   const fetchTags = async (): Promise<void> => {
@@ -39,7 +40,14 @@ const CreatePost = () => {
   }, []);
 
   return (
-    <form className="flex flex-col gap-y-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+
+        create();
+      }}
+      className="flex flex-col gap-y-4"
+    >
       <Input
         id="title"
         name="title"
@@ -52,23 +60,40 @@ const CreatePost = () => {
           setPost({ ...post, title: value });
         }}
       />
-      <Dropdown
+      <div className="flex items-end gap-x-2">
+        <Input
+          id="newTag"
+          name="newTag"
+          label="Add New Tag"
+          type="text"
+          value={newTag}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const { value } = e.target;
+
+            setNewTag(value);
+          }}
+        />
+        <Button>Add Tag</Button>
+      </div>
+      <ChipGroup options={options} />
+      {/* <Dropdown
         id="tags"
         label="Tags"
         onSelect={(value) => {
           const selectedTag = allTags.find((tag) => tag.title === value);
 
-          console.log("Selected =>", selectedTag);
-
-          // setPost({...post, tags: [selectedTag]})
+          setPost({
+            ...post,
+            tags: [selectedTag as Tag],
+          });
         }}
         options={options}
-      />
+      /> */}
       <Markdown
         value={post.body}
         onChange={(value) => setPost({ ...post, body: value })}
       />
-      <Button onClick={create}>Create</Button>
+      <Button>Create</Button>
     </form>
   );
 };

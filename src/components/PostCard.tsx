@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { Button, Icon } from "./index";
+import { Button, Icon, Chip } from "./index";
 import { Icons } from "../assets/data";
 import { useFirebaseDate } from "../hooks";
 import { Post } from "../types";
@@ -9,12 +9,7 @@ const PostCard = ({ id, title, body, timestamp, tags }: Post) => {
   const date = useFirebaseDate(timestamp);
 
   const buildTags = tags.map((tag) => (
-    <div
-      key={tag.id}
-      className="w-fit p-1.5 rounded-full bg-dark-indigo text-light-gray text-xs font-bold"
-    >
-      <span>{tag.title}</span>
-    </div>
+    <Chip key={tag.id} content={tag.title} />
   ));
 
   return (

@@ -24,7 +24,7 @@ const Input = ({
   errorMessage,
 }: Props) => {
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className="flex flex-col gap-y-1 w-full">
       <label htmlFor={id}>{label}</label>
       <input
         id={id}
