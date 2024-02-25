@@ -4,18 +4,18 @@ interface Props {
   content: string | number;
   color?: string;
   isClickable?: boolean;
-  toggle?: (event: MouseEventHandler<HTMLElement>) => void;
+  onClick?: (event: MouseEventHandler<HTMLElement>) => void;
 }
 
 const Chip = ({
   content = " ",
   color = "bg-dark-indigo",
   isClickable = false,
-  toggle,
+  onClick,
 }: Props) => {
-  const classes = {
+  const classes: { base: string; clickable: string } = {
     base: "flex w-fit p-1.5 rounded-full text-light-gray text-xs font-bold",
-    clickable: "cursor-pointer",
+    clickable: "cursor-pointer active:scale-105",
   };
 
   return (
@@ -23,7 +23,7 @@ const Chip = ({
       className={[classes.base, color, isClickable && classes.clickable].join(
         " "
       )}
-      {...(isClickable && toggle)}
+      {...(isClickable && onClick)}
     >
       <span className="m-auto">{content}</span>
     </div>

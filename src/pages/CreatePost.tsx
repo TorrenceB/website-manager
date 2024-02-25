@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { DocumentData, Timestamp } from "firebase/firestore";
 
-import { Markdown, Input, ChipGroup, Button } from "../components";
+import { Markdown, Input, Button, AddNewTag } from "../components";
 import Client from "../api/client";
 import { tags, posts } from "../plugins/firebase";
 import { Post, Tag } from "../types";
@@ -17,23 +17,29 @@ const CreatePost = () => {
     timestamp: new Timestamp(0, 0),
   });
 
-  const [allTags, setAllTags] = useState<DocumentData[]>([]);
-  const [newTag, setNewTag] = useState("");
-  const [errors, setErrors] = useState({});
+  const [allTags, setAllTags] = useState<Tag[]>([]);
 
   const fetchTags = async (): Promise<void> => {
     const data = await client.$list(tags);
 
-    setAllTags(data);
+    setAllTags(data as Tag[]);
   };
 
-  const create = async (): Promise<void> => {
-    const response = await client.$create({ collection: posts, data: post });
+  const create = {
+    post: async (): Promise<void> => {
+      const response = await client.$create({ collection: posts, data: post });
 
-    console.log("RESPONSE =>", response);
+      console.log("RESPONSE =>", response);
+    },
+    tag: async (tag: string): Promise<void> => {
+      const { data } = await client.$create({
+        collection: tags,
+        data: { title: tag },
+      });
+
+      setAllTags([...allTags, data as Tag]);
+    },
   };
-
-  const options = allTags.map(({ title }) => title);
 
   useEffect(() => {
     fetchTags();
@@ -44,7 +50,7 @@ const CreatePost = () => {
       onSubmit={(e) => {
         e.preventDefault();
 
-        create();
+        // create.post();
       }}
       className="flex flex-col gap-y-4"
     >
@@ -60,35 +66,7 @@ const CreatePost = () => {
           setPost({ ...post, title: value });
         }}
       />
-      <div className="flex items-end gap-x-2">
-        <Input
-          id="newTag"
-          name="newTag"
-          label="Add New Tag"
-          type="text"
-          value={newTag}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-
-            setNewTag(value);
-          }}
-        />
-        <Button>Add Tag</Button>
-      </div>
-      <ChipGroup options={options} />
-      {/* <Dropdown
-        id="tags"
-        label="Tags"
-        onSelect={(value) => {
-          const selectedTag = allTags.find((tag) => tag.title === value);
-
-          setPost({
-            ...post,
-            tags: [selectedTag as Tag],
-          });
-        }}
-        options={options}
-      /> */}
+      <AddNewTag tags={allTags} onTagAdd={(tag) => create.tag(tag)} />
       <Markdown
         value={post.body}
         onChange={(value) => setPost({ ...post, body: value })}

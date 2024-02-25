@@ -19,8 +19,8 @@ type Client = {
     data,
   }: {
     collection: CollectionReference;
-    data: Object;
-  }) => Promise<{ status: string; id: string }>;
+    data: unknown;
+  }) => Promise<{ status: string; data: unknown }>;
   $mutate: ({
     path,
     id,
@@ -70,10 +70,11 @@ const Client = (): Client => ({
   $create: async ({ collection, data }) => {
     try {
       const docRef = await addDoc(collection, data);
+      const docSnap = await getDoc(docRef);
 
       return {
         status: "created",
-        id: docRef.id,
+        data: docSnap.data(),
       };
     } catch (error) {
       throw Error(`@client.ts::Client.$create ${error}`);
