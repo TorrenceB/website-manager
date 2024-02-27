@@ -5,11 +5,11 @@ import { Tag } from "../types";
 
 interface Props {
   tags: Tag[];
-  onTagAdd: (tag: string) => void;
+  onTagAdd: (tag: Tag) => void;
 }
 
 const AddNewTag = ({ tags = [], onTagAdd }: Props) => {
-  const [tag, setTag] = useState<string>("");
+  const [tag, setTag] = useState<Tag>({ id: "", title: "" });
 
   const chips = tags.map((tag) => (
     <Chip
@@ -28,18 +28,18 @@ const AddNewTag = ({ tags = [], onTagAdd }: Props) => {
           name="newTag"
           label="Add New Tag"
           type="text"
-          value={tag}
+          value={tag.title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const { value } = e.target;
 
-            setTag(value);
+            setTag({ ...tag, title: value });
           }}
         />
         <Button
           onClick={() => {
             onTagAdd(tag);
 
-            setTag("");
+            setTag({ ...tag, title: "" });
           }}
         >
           Add Tag

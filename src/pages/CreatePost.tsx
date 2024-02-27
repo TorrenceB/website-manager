@@ -1,12 +1,12 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { DocumentData, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 import { Markdown, Input, Button, AddNewTag } from "../components";
 import Client from "../api/client";
 import { tags, posts } from "../plugins/firebase";
 import { Post, Tag } from "../types";
 
-const client = Client();
+const client: Client = Client();
 
 const CreatePost = () => {
   const [post, setPost] = useState<Post>({
@@ -31,10 +31,10 @@ const CreatePost = () => {
 
       console.log("RESPONSE =>", response);
     },
-    tag: async (tag: string): Promise<void> => {
+    tag: async (tag: Tag): Promise<void> => {
       const { data } = await client.$create({
         collection: tags,
-        data: { title: tag },
+        data: { title: tag.title },
       });
 
       setAllTags([...allTags, data as Tag]);
@@ -52,7 +52,7 @@ const CreatePost = () => {
 
         // create.post();
       }}
-      className="flex flex-col gap-y-4"
+      className="flex flex-col gap-y-4 p-6"
     >
       <Input
         id="title"
@@ -66,7 +66,10 @@ const CreatePost = () => {
           setPost({ ...post, title: value });
         }}
       />
-      <AddNewTag tags={allTags} onTagAdd={(tag) => create.tag(tag)} />
+      <AddNewTag
+        tags={allTags}
+        onTagAdd={(tag) => create.tag({ title: tag.title, id: tag.id })}
+      />
       <Markdown
         value={post.body}
         onChange={(value) => setPost({ ...post, body: value })}
