@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, MouseEvent } from "react";
 
 import { Chip, Input, Button } from "../components";
 import { Tag } from "../types";
@@ -36,7 +36,9 @@ const AddNewTag = ({ tags = [], onTagAdd }: Props) => {
           }}
         />
         <Button
-          onClick={() => {
+          onClick={(e: MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+
             onTagAdd(tag);
 
             setTag({ ...tag, title: "" });
