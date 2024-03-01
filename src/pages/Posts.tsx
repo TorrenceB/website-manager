@@ -14,9 +14,8 @@ const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<DocumentData[]>([]);
 
   const fetch = async (): Promise<void> => {
-    const data = await client.$list(posts);
-
-    setBlogPosts(data);
+    // const data = await client.$list(posts);
+    // setBlogPosts(data);
   };
 
   useEffect(() => {

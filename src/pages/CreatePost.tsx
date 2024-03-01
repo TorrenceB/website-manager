@@ -1,10 +1,11 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { Timestamp } from "firebase/firestore";
+import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
 import { Markdown, Input, Button, AddNewTag } from "../components";
-import Client from "../api/client";
 import { tags, posts } from "../plugins/firebase";
 import { Post, Tag } from "../types";
+import converter from "../utils/firebase-converter";
+import Client from "../api/client";
 
 const client: Client = Client();
 
@@ -20,24 +21,33 @@ const CreatePost = () => {
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   const fetchTags = async (): Promise<void> => {
-    const data = await client.$list(tags);
+    const data = await client.$list({
+      collection: tags,
+      converter: converter<Tag>(),
+    });
 
-    setAllTags(data as Tag[]);
+    setAllTags(data);
   };
 
   const create = {
-    post: async (): Promise<void> => {
-      const response = await client.$create({ collection: posts, data: post });
+    // post: async (): Promise<void> => {
+    //   const response = await client.$create({ collection: posts, data: post });
 
-      console.log("RESPONSE =>", response);
-    },
+    //   console.log("RESPONSE =>", response);
+    // },
     tag: async (tag: Tag): Promise<void> => {
-      const { data } = await client.$create({
+      const { data, id } = await client.$create({
         collection: tags,
         data: { title: tag.title },
+        converter: converter<Tag>(),
       });
 
-      setAllTags([...allTags, data as Tag]);
+      const newTag: Tag = {
+        id,
+        title: data?.title,
+      };
+
+      setAllTags([...allTags, newTag]);
     },
   };
 
@@ -49,6 +59,8 @@ const CreatePost = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+
+        console.log("Submit triggered");
 
         // create.post();
       }}
