@@ -16,22 +16,18 @@ import { db } from "../plugins/firebase";
 
 type Client = {
   $get: ({ path, id }: { path: string; id: string }) => Promise<DocumentData>;
-  $list: ({
-    collection,
-    converter,
-  }: {
-    collection: CollectionReference;
-    converter: FirestoreDataConverter<DocumentData>;
-  }) => Promise<DocumentData[]>;
+  $list: (collection: CollectionReference) => Promise<DocumentData[]>;
   $create: ({
     collection,
     data,
-    converter,
   }: {
-    collection: CollectionReference;
-    data: unknown;
-    converter: FirestoreDataConverter<DocumentData>;
-  }) => Promise<{ status: string; data: DocumentData | undefined; id: string }>;
+    collection: CollectionReference<DocumentData>;
+    data: DocumentData;
+  }) => Promise<{
+    [key: string]: string;
+    id: string;
+    status: string;
+  }>;
   $mutate: ({
     path,
     id,
@@ -59,14 +55,13 @@ const Client = (): Client => ({
       throw Error(`@client.ts::Client.$get ${error}`);
     }
   },
-  $list: async ({ collection, converter }) => {
+  $list: async (collection: CollectionReference) => {
     try {
       const data: DocumentData[] = [];
-      const query = collection.withConverter(converter);
-      const snapshot = await getDocs(query);
+      const snapshot = await getDocs(collection);
 
       snapshot.forEach((doc) => {
-        const item = doc.data();
+        const item = { ...doc.data(), id: doc.id };
 
         data.push(item);
       });
@@ -76,17 +71,15 @@ const Client = (): Client => ({
       throw Error(`@client.ts::Client.$list ${error}`);
     }
   },
-  $create: async ({ collection, data, converter }) => {
+  $create: async ({ collection, data }) => {
     try {
-      const docRef: DocumentReference = (
-        await addDoc(collection, data)
-      ).withConverter(converter);
+      const docRef: DocumentReference = await addDoc(collection, data);
       const docSnap: DocumentSnapshot = await getDoc(docRef);
 
       return {
-        status: "created",
+        ...docSnap.data(),
         id: docSnap.id,
-        data: docSnap.data(),
+        status: "created",
       };
     } catch (error) {
       throw Error(`@client.ts::Client.$create ${error}`);

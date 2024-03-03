@@ -1,11 +1,9 @@
-import {
-  PartialWithFieldValue,
-  QueryDocumentSnapshot,
-} from "firebase/firestore";
+import { QueryDocumentSnapshot, WithFieldValue } from "firebase/firestore";
 
 const converter = <Type>() => ({
-  toFirestore: (data: PartialWithFieldValue<Type>) => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as Type,
+  toFirestore: (data: WithFieldValue<Type>) => data,
+  fromFirestore: (snapshot: QueryDocumentSnapshot) =>
+    ({ ...snapshot.data(), id: snapshot.id } as Type),
 });
 
 export default converter;
