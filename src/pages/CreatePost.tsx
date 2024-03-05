@@ -79,8 +79,9 @@ const CreatePost = () => {
         tags={allTags}
         onTagAdd={(tag) => create.tag(tag)}
         onTagClick={(tag) => {
-          console.log("Tag clicked =>", tag);
-          // setPost({ ...post, tags: [...post.tags, tag] });
+          const tagDoesntExist = !post.tags.some(({ id }) => id);
+
+          if (tagDoesntExist) setPost({ ...post, tags: [...post.tags, tag] });
         }}
       />
       <Markdown
