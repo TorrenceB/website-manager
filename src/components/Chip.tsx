@@ -1,31 +1,44 @@
 import { MouseEventHandler } from "react";
 
+import { Icon } from "./index";
+import { Icons } from "../assets/data";
+
 interface Props {
   content: string | number;
   color?: string;
-  isClickable?: boolean;
   onClick?: MouseEventHandler<HTMLElement>;
+  onDelete?: () => void;
+}
+
+interface Classes {
+  base: string;
+  clickable: string;
+  deletable: string;
 }
 
 const Chip = ({
-  content = " ",
+  content = "",
   color = "bg-dark-indigo",
-  isClickable = false,
   onClick,
+  onDelete,
 }: Props) => {
-  const classes: { base: string; clickable: string } = {
+  const classes: Classes = {
     base: "flex w-fit p-1.5 rounded-full text-light-gray text-xs font-bold",
     clickable: "cursor-pointer active:scale-105",
+    deletable: "",
   };
 
   return (
     <div
-      onClick={isClickable ? onClick : undefined}
-      className={[classes.base, color, isClickable && classes.clickable].join(
-        " "
-      )}
+      onClick={onClick ? onClick : undefined}
+      className={[classes.base, color, onClick && classes.clickable].join(" ")}
     >
-      <span className="m-auto">{content}</span>
+      <span className="m-auto flex items-center">
+        {onDelete && (
+          <Icon icon={Icons["x-mark"]} onClick={onDelete} color="#fff" />
+        )}
+        {content}
+      </span>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { Timestamp } from "firebase/firestore";
 
-import { Markdown, Input, Button, AddNewTag } from "../components";
+import { Markdown, Input, Button, AddNewTag, Chip } from "../components";
 import { tags, posts } from "../plugins/firebase";
 import { Post, Tag } from "../types";
 
@@ -50,6 +50,31 @@ const CreatePost = () => {
     },
   };
 
+  const handleDelete = (id: string): void => {
+    const tags = post.tags.filter((tag) => tag.id !== id);
+
+    setPost({ ...post, tags });
+  };
+
+  const selectedTags =
+    post.tags && post.tags.length > 0 ? (
+      <div>
+        <h3>Selected Tags</h3>
+        <div className="flex w-full gap-2">
+          {post.tags.map((tag) => (
+            <Chip
+              key={tag.id}
+              content={tag.title}
+              onDelete={() => handleDelete(tag.id)}
+              color="bg-red-500"
+            />
+          ))}
+        </div>
+      </div>
+    ) : (
+      <h3>No Selected Tags</h3>
+    );
+
   useEffect(() => {
     fetchTags();
   }, []);
@@ -60,6 +85,14 @@ const CreatePost = () => {
         e.preventDefault();
 
         create.post();
+
+        setPost({
+          id: "",
+          title: "",
+          body: "",
+          tags: [],
+          timestamp: new Timestamp(0, 0),
+        });
       }}
       className="flex flex-col gap-y-4 p-6"
     >
@@ -79,11 +112,12 @@ const CreatePost = () => {
         tags={allTags}
         onTagAdd={(tag) => create.tag(tag)}
         onTagClick={(tag) => {
-          const tagDoesntExist = !post.tags.some(({ id }) => id);
+          const tagDoesntExist = !post.tags.some(({ id }) => id === tag.id);
 
           if (tagDoesntExist) setPost({ ...post, tags: [...post.tags, tag] });
         }}
       />
+      {selectedTags}
       <Markdown
         value={post.body}
         onChange={(value) => setPost({ ...post, body: value })}

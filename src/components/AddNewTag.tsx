@@ -16,14 +16,13 @@ const AddNewTag = ({ tags = [], onTagAdd, onTagClick }: Props) => {
     <Chip
       key={tag.id}
       content={tag.title}
-      isClickable
       color="bg-deep-purple-gray"
       onClick={() => onTagClick(tag)}
     />
   ));
 
   return (
-    <div>
+    <>
       <div className="flex items-end gap-x-2">
         <Input
           id="newTag"
@@ -49,8 +48,11 @@ const AddNewTag = ({ tags = [], onTagAdd, onTagClick }: Props) => {
           Add Tag
         </Button>
       </div>
-      <div className="flex items-center flex-wrap gap-2 mt-6">{chips}</div>
-    </div>
+      <div>
+        <h3>Available Tags</h3>
+        <div className="flex items-center flex-wrap gap-2">{chips}</div>
+      </div>
+    </>
   );
 };
 
