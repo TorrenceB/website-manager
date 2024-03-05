@@ -4,7 +4,7 @@ interface Props {
   content: string | number;
   color?: string;
   isClickable?: boolean;
-  onClick?: (event: MouseEventHandler<HTMLElement>) => void;
+  onClick?: MouseEventHandler<HTMLElement>;
 }
 
 const Chip = ({
@@ -20,10 +20,10 @@ const Chip = ({
 
   return (
     <div
+      onClick={isClickable ? onClick : undefined}
       className={[classes.base, color, isClickable && classes.clickable].join(
         " "
       )}
-      {...(isClickable && onClick)}
     >
       <span className="m-auto">{content}</span>
     </div>

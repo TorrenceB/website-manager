@@ -6,17 +6,19 @@ import { Tag } from "../types";
 interface Props {
   tags: Tag[];
   onTagAdd: (tag: Tag) => void;
+  onTagClick: (tag: Tag) => void;
 }
 
-const AddNewTag = ({ tags = [], onTagAdd }: Props) => {
+const AddNewTag = ({ tags = [], onTagAdd, onTagClick }: Props) => {
   const [tag, setTag] = useState<Tag>({ id: "", title: "" });
 
   const chips = tags.map((tag) => (
     <Chip
       key={tag.id}
       content={tag.title}
-      isClickable={true}
+      isClickable
       color="bg-deep-purple-gray"
+      onClick={() => onTagClick(tag)}
     />
   ));
 

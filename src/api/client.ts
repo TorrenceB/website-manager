@@ -9,7 +9,6 @@ import {
   DocumentData,
   DocumentSnapshot,
   DocumentReference,
-  FirestoreDataConverter,
 } from "@firebase/firestore";
 
 import { db } from "../plugins/firebase";

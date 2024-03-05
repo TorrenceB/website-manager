@@ -59,9 +59,7 @@ const CreatePost = () => {
       onSubmit={(e) => {
         e.preventDefault();
 
-        console.log("Submit triggered");
-
-        // create.post();
+        create.post();
       }}
       className="flex flex-col gap-y-4 p-6"
     >
@@ -79,7 +77,11 @@ const CreatePost = () => {
       />
       <AddNewTag
         tags={allTags}
-        onTagAdd={(tag) => create.tag({ title: tag.title, id: tag.id })}
+        onTagAdd={(tag) => create.tag(tag)}
+        onTagClick={(tag) => {
+          console.log("Tag clicked =>", tag);
+          // setPost({ ...post, tags: [...post.tags, tag] });
+        }}
       />
       <Markdown
         value={post.body}
