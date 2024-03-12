@@ -10,7 +10,7 @@ interface Props {
 const Icon = ({
   icon,
   color = "#474787",
-  size = "5",
+  size = "w-5 h-5",
   onClick,
 }: Props): JSX.Element => {
   const paths = icon.map((d) => <path key={d} d={d} />);
@@ -24,9 +24,7 @@ const Icon = ({
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill={color}
-      className={[`w-${size}`, `h-${size}`, onClick && classes.clickable].join(
-        " "
-      )}
+      className={[size, onClick && classes.clickable].join(" ")}
       onClick={onClick ? onClick : undefined}
     >
       {paths}

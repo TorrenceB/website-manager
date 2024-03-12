@@ -5,7 +5,13 @@ import { Icons } from "../assets/data";
 import { useFirebaseDate } from "../hooks";
 import { Post } from "../types";
 
-const PostCard = ({ id, title, body, timestamp, tags }: Post) => {
+interface Props {
+  post: Post;
+  onDelete?: () => void;
+}
+
+const PostCard = ({ post, onDelete }: Props) => {
+  const { id, title, timestamp, body, tags } = post;
   const date = useFirebaseDate(timestamp);
 
   const buildTags = tags.map((tag) => (
@@ -27,7 +33,7 @@ const PostCard = ({ id, title, body, timestamp, tags }: Post) => {
             <Icon icon={Icons.pencil} />
           </Button>
         </Link>
-        <Button>
+        <Button onClick={onDelete}>
           Delete
           <Icon icon={Icons.trash} />
         </Button>

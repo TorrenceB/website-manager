@@ -113,8 +113,9 @@ const CreatePost = () => {
         onTagAdd={(tag) => create.tag(tag)}
         onTagClick={(tag) => {
           const tagDoesntExist = !post.tags.some(({ id }) => id === tag.id);
+          const tags = [...post.tags, tag];
 
-          if (tagDoesntExist) setPost({ ...post, tags: [...post.tags, tag] });
+          if (tagDoesntExist) setPost({ ...post, tags });
         }}
       />
       {selectedTags}
