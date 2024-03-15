@@ -1,60 +1,19 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useEffect } from "react";
 import { Timestamp } from "firebase/firestore";
 
-import { Markdown, Input, Button, AddNewTag, Chip } from "../components";
-import { tags, posts } from "../plugins/firebase";
-import { Post, Tag } from "../types";
-
-import Client from "../api/client";
-
-const client: Client = Client();
+import {
+  PostForm,
+  Chip,
+  Input,
+  Button,
+  AddNewTag,
+  Markdown,
+} from "../components";
+import { usePost, useTags } from "../hooks";
 
 const CreatePost = () => {
-  const [post, setPost] = useState<Post>({
-    id: "",
-    title: "",
-    body: "",
-    tags: [],
-    timestamp: new Timestamp(0, 0),
-  });
-
-  const [allTags, setAllTags] = useState<Tag[]>([]);
-
-  const fetchTags = async (): Promise<void> => {
-    const data = (await client.$list(tags)) as Tag[];
-
-    setAllTags(data);
-  };
-
-  const create = {
-    post: async (): Promise<void> => {
-      const response = await client.$create({
-        collection: posts,
-        data: post,
-      });
-
-      console.log("RESPONSE =>", response);
-    },
-    tag: async (tag: Tag): Promise<void> => {
-      const { id, title } = await client.$create({
-        collection: tags,
-        data: { title: tag.title },
-      });
-
-      const newTag: Tag = {
-        id,
-        title,
-      };
-
-      setAllTags([...allTags, newTag]);
-    },
-  };
-
-  const handleDelete = (id: string): void => {
-    const tags = post.tags.filter((tag) => tag.id !== id);
-
-    setPost({ ...post, tags });
-  };
+  const { post, createPost, setPost } = usePost();
+  const { tags, fetchTags, createTag } = useTags();
 
   const selectedTags =
     post.tags && post.tags.length > 0 ? (
@@ -65,7 +24,12 @@ const CreatePost = () => {
             <Chip
               key={tag.id}
               content={tag.title}
-              onDelete={() => handleDelete(tag.id)}
+              onDelete={() =>
+                setPost({
+                  ...post,
+                  tags: post.tags.filter(({ id }) => tag.id !== id),
+                })
+              }
               color="bg-red-500"
             />
           ))}
@@ -84,7 +48,7 @@ const CreatePost = () => {
       onSubmit={(e) => {
         e.preventDefault();
 
-        create.post();
+        createPost();
 
         setPost({
           id: "",
@@ -102,15 +66,11 @@ const CreatePost = () => {
         label="Title"
         type="text"
         value={post.title}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const { value } = e.target;
-
-          setPost({ ...post, title: value });
-        }}
+        onChange={({ target }) => setPost({ ...post, title: target.value })}
       />
       <AddNewTag
-        tags={allTags}
-        onTagAdd={(tag) => create.tag(tag)}
+        tags={tags}
+        onTagAdd={(tag) => createTag(tag)}
         onTagClick={(tag) => {
           const tagDoesntExist = !post.tags.some(({ id }) => id === tag.id);
           const tags = [...post.tags, tag];

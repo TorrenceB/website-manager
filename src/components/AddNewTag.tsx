@@ -4,7 +4,7 @@ import { Chip, Input, Button } from "../components";
 import { Tag } from "../types";
 
 interface Props {
-  tags: Tag[];
+  tags?: Tag[];
   onTagAdd: (tag: Tag) => void;
   onTagClick: (tag: Tag) => void;
 }

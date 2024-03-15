@@ -2,52 +2,25 @@ import { useParams, useNavigate } from "react-router";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Timestamp } from "firebase/firestore";
 
-import { Markdown, Input, AddNewTag, Button, Chip } from "../components";
-import { Post, Tag } from "../types";
-import { tags } from "../plugins/firebase";
-
-import Client from "../api/client";
-
-const client: Client = Client();
+import {
+  Chip,
+  PostForm,
+  Input,
+  AddNewTag,
+  Markdown,
+  Button,
+} from "../components";
+import { usePost, useTags } from "../hooks";
 
 const UpdatePost = () => {
-  const [post, setPost] = useState<Post>({
-    id: "",
-    title: "",
-    body: "",
-    tags: [],
-    timestamp: new Timestamp(0, 0),
-  });
-  const [allTags, setAllTags] = useState<Tag[]>([]);
+  const { post, setPost, fetchPost, updatePost } = usePost();
+  const { tags, fetchTags, createTag } = useTags();
   const { id = "" } = useParams<string>();
   const navigate = useNavigate();
 
-  const fetch = {
-    post: async (): Promise<void> => {
-      const data = (await client.$get({ id, path: "posts" })) as Post;
-
-      setPost(data);
-    },
-    tags: async (): Promise<void> => {
-      const data = (await client.$list(tags)) as Tag[];
-
-      setAllTags(data);
-    },
-  };
-
-  const handleTagDelete = (id: string): void => {
-    const tags = post.tags.filter((tag) => tag.id !== id);
-
-    setPost({ ...post, tags });
-  };
-
-  const updatePost = async (): Promise<void> => {
-    await client.$mutate({ path: "posts", id, data: post });
-  };
-
   useEffect(() => {
-    fetch.post();
-    fetch.tags();
+    fetchPost(id);
+    fetchTags();
   }, []);
 
   const selectedTags =
@@ -59,7 +32,12 @@ const UpdatePost = () => {
             <Chip
               key={tag.id}
               content={tag.title}
-              onDelete={() => handleTagDelete(tag.id)}
+              onDelete={() =>
+                setPost({
+                  ...post,
+                  tags: post.tags.filter(({ id }) => tag.id !== id),
+                })
+              }
               color="bg-red-500"
             />
           ))}
@@ -70,12 +48,13 @@ const UpdatePost = () => {
     );
 
   return (
+    // <PostForm />
     <form
       className="flex flex-col gap-y-4"
       onSubmit={(e) => {
         e.preventDefault();
 
-        updatePost();
+        updatePost(id);
 
         setPost({
           id: "",
@@ -101,21 +80,9 @@ const UpdatePost = () => {
         }}
       />
       <AddNewTag
-        tags={allTags}
-        onTagAdd={async (tag: Tag): Promise<void> => {
-          const { id, title } = await client.$create({
-            collection: tags,
-            data: { title: tag.title },
-          });
-
-          const newTag: Tag = {
-            id,
-            title,
-          };
-
-          setAllTags([...allTags, newTag]);
-        }}
-        onTagClick={(tag: Tag) => {
+        tags={tags}
+        onTagAdd={async (tag): Promise<void> => createTag(tag)}
+        onTagClick={(tag) => {
           const tagDoesntExist = !post.tags.some(({ id }) => id === tag.id);
           const tags = [...post.tags, tag];
 

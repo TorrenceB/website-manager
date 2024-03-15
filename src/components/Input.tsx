@@ -2,14 +2,14 @@ import { ChangeEventHandler } from "react";
 
 interface Props {
   id: string;
-  value: string | number;
+  value?: string | number;
   label?: string;
   name?: string;
   placeholder?: string;
   hasError?: boolean;
   errorMessage?: string;
   type?: "text" | "number" | "email" | "password";
-  onChange?: ChangeEventHandler;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const Input = ({
