@@ -1,40 +1,74 @@
-import { useState, ChangeEvent, MouseEvent } from "react";
+import {
+  useState,
+  ChangeEvent,
+  MouseEvent,
+  ReactElement,
+  FormEvent,
+} from "react";
 import { useNavigate } from "react-router";
+import { Timestamp } from "firebase/firestore";
 
 import { Input, Markdown, Button, Chip } from "./index";
-import { Tag } from "../types";
+import { useTags } from "../hooks";
+import { Tag, Post } from "../types";
 
 interface Props {
+  post: Post;
   tags: Tag[];
-  onClear: () => void;
-  onChange: (value: string) => void;
-  onTagClick: (tag: Tag) => void;
-  onTagAdd: (tag: Tag) => void;
-  onTagDelete: (tag: Tag) => void;
+  buttonContent: string;
+  setPost: (post: Post) => void;
+  postAction: (id: string) => Promise<void>;
 }
 
 const PostForm = ({
+  post,
   tags,
-  onClear,
-  onChange,
-  onTagAdd,
-  onTagClick,
-  onTagDelete,
+  buttonContent,
+  postAction,
+  setPost,
 }: Props) => {
   const [tag, setTag] = useState<Tag>({ id: "", title: "" });
-  const [markdown, setMarkdown] = useState<string>("");
+  const { createTag } = useTags();
   const navigate = useNavigate();
 
+  const handleTagClick = (tag: Tag) => {
+    const tagDoesntExist = !post.tags.some(({ id }) => id === tag.id);
+    const tags = [...post.tags, tag];
+
+    if (tagDoesntExist) setPost({ ...post, tags });
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    postAction("");
+
+    setPost({
+      id: "",
+      title: "",
+      body: "",
+      tags: [],
+      timestamp: new Timestamp(0, 0),
+    });
+
+    navigate("/posts");
+  };
+
   const selectedTags =
-    tags && tags.length > 0 ? (
+    post.tags && post.tags.length > 0 ? (
       <div>
         <h3>Selected Tags</h3>
         <div className="flex w-full gap-2">
-          {tags.map((tag) => (
+          {post.tags.map((tag) => (
             <Chip
               key={tag.id}
               content={tag.title}
-              onDelete={() => onTagDelete(tag)}
+              onDelete={() =>
+                setPost({
+                  ...post,
+                  tags: post.tags.filter(({ id }) => tag.id !== id),
+                })
+              }
               color="bg-red-500"
             />
           ))}
@@ -44,63 +78,82 @@ const PostForm = ({
       <h3>No Selected Tags</h3>
     );
 
-  const chips = tags.map((tag) => (
+  const title = (
+    <Input
+      id="title"
+      name="title"
+      label="Title"
+      type="text"
+      value={post.title}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+
+        setPost({ ...post, title: value });
+      }}
+    />
+  );
+
+  const newTag = (
+    <Input
+      id="newTag"
+      name="newTag"
+      label="Add New Tag"
+      type="text"
+      value={tag.title}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+
+        setTag({ ...tag, title: value });
+      }}
+    />
+  );
+
+  const createNewTag = (
+    <Button
+      onClick={(e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        createTag(tag);
+
+        setTag({ ...tag, title: "" });
+      }}
+    >
+      Add Tag
+    </Button>
+  );
+
+  const markdown = (
+    <Markdown
+      value={post.body}
+      onChange={(value) => setPost({ ...post, body: value })}
+    />
+  );
+
+  const chips = tags?.map((tag) => (
     <Chip
       key={tag.id}
       content={tag.title}
       color="bg-deep-purple-gray"
-      onClick={() => onTagClick(tag)}
+      onClick={() => handleTagClick(tag)}
     />
   ));
 
+  const allTags = (
+    <div>
+      <h3>Available Tags</h3>
+      <div className="flex items-center flex-wrap gap-2">{chips}</div>
+    </div>
+  );
+
   return (
-    <form
-      className="flex flex-col gap-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onClear();
-        navigate("/posts");
-      }}
-    >
-      <Input
-        id="title"
-        name="title"
-        label="Title"
-        type="text"
-        onChange={({ target }) => onChange(target.value)}
-      />
-      <div className="flex items-end gap-x-2">
-        <Input
-          id="newTag"
-          name="newTag"
-          label="Add New Tag"
-          type="text"
-          value={tag.title}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-
-            setTag({ ...tag, title: value });
-          }}
-        />
-        <Button
-          onClick={(e: MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-
-            onTagAdd(tag);
-
-            setTag({ ...tag, title: "" });
-          }}
-        >
-          Add Tag
-        </Button>
-      </div>
-      <div>
-        <h3>Available Tags</h3>
-        <div className="flex items-center flex-wrap gap-2">{chips}</div>
-      </div>
+    <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
+      {title}
+      <div className="flex items-end gap-x-2">{newTag}</div>
+      {createNewTag}
+      {allTags}
       {selectedTags}
-      <Markdown value={markdown} onChange={(value) => onChange(value)} />
-      <Button>Update</Button>
+      {markdown}
+      <Button>{buttonContent}</Button>
     </form>
   );
 };

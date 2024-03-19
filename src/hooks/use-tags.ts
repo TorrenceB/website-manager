@@ -7,7 +7,7 @@ import { tags as tagsData } from "../plugins/firebase";
 const client = Client();
 
 const useTags = () => {
-  const [tags, setTags] = useState<Tag[]>();
+  const [tags, setTags] = useState<Tag[]>([]);
 
   const fetchTags = async (): Promise<void> => {
     const tags = (await client.$list(tagsData)) as Tag[];
