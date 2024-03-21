@@ -19,8 +19,8 @@ const UpdatePost = () => {
       post={post}
       tags={tags}
       setPost={setPost}
-      buttonContent={"Update Post"}
       postAction={() => updatePost(id)}
+      buttonContent="Update Post"
     />
   );
 };

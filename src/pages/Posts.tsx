@@ -44,14 +44,16 @@ const Posts = () => {
     <div className="flex flex-col justify-center gap-y-4 p-4 w-full">
       <h1>Blog Management</h1>
 
-      <Link to={"/create-post"}>
-        <Button>
-          Create Post
-          <Icon icon={Icons.plus} />
-        </Button>
-      </Link>
+      <div className="w-40">
+        <Link to={"/create-post"}>
+          <Button>
+            Create Post
+            <Icon icon={Icons.plus} />
+          </Button>
+        </Link>
+      </div>
 
-      {buildPosts}
+      <div className="md:grid md:grid-cols-4">{buildPosts}</div>
     </div>
   );
 };

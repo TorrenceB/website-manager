@@ -9,7 +9,7 @@ interface Props {
 
 const Icon = ({
   icon,
-  color = "#474787",
+  color = "#fff",
   size = "w-5 h-5",
   onClick,
 }: Props): JSX.Element => {

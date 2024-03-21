@@ -3,11 +3,15 @@
 @tailwind utilities;
 
 body {
-  @apply bg-dark-indigo text-light-gray m-auto;
+  @apply text-gray-800 m-auto;
 }
 
 h1 {
   @apply text-3xl font-semibold;
+}
+
+h2 {
+  @apply text-xl font-semibold;
 }
 
 h3 {

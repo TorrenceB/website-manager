@@ -18,12 +18,12 @@ interface Classes {
 
 const Chip = ({
   content = "",
-  color = "bg-dark-indigo",
+  color = "bg-honeydew",
   onClick,
   onDelete,
 }: Props) => {
   const classes: Classes = {
-    base: "flex w-fit p-1.5 rounded-full text-light-gray text-xs font-bold",
+    base: "flex w-fit p-1.5 rounded-md text-black text-xs font-bold",
     clickable: "cursor-pointer active:scale-105",
     deletable: "",
   };

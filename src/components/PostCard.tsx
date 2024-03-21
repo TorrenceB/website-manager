@@ -13,19 +13,32 @@ interface Props {
 const PostCard = ({ post, onDelete }: Props) => {
   const { id, title, timestamp, body, tags } = post;
   const date = useFirebaseDate(timestamp);
+  const tagColor = (index: number) => {
+    if (index % 2) {
+      return "bg-honeydew";
+    } else if (index % 3) {
+      return "bg-alice-blue";
+    } else {
+      return "bg-lavender-blush";
+    }
+  };
 
-  const buildTags = tags.map((tag) => (
-    <Chip key={tag.id} content={tag.title} />
+  const buildTags = tags.map((tag, index) => (
+    <Chip key={tag.id} content={tag.title} color={tagColor(index)} />
   ));
 
   return (
-    <div className="flex flex-col gap-2 rounded p-4 h-72 w-full bg-cool-gray text-light-gray transition-all">
-      <h3 className="text-dark-indigo">{title}</h3>
-      <p>{date}</p>
-      <hr className="border border-light-gray w-full" />
-      {buildTags}
+    <div className="flex flex-col justify-between rounded-md p-4 h-[30rem] w-96 shadow-lg text-black transition-all">
+      <img
+        src="https://i0.wp.com/blog.publer.io/wp-content/uploads/2023/12/blog-1.png?w=2000&ssl=1"
+        className="rounded-md"
+      />
+
+      <div className="flex gap-2">{buildTags}</div>
+      <h3 className="text-black">{title}</h3>
 
       <p className="max-h-32 overflow-hidden">{body}</p>
+      <p className="flex-end">{date}</p>
       <div className="flex gap-2">
         <Link to={`/update-post/${id}`} className="w-full">
           <Button>

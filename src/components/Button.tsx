@@ -9,7 +9,7 @@ const Button = ({ onClick, children }: Props) => {
   return (
     <button
       onClick={onClick}
-      className="w-full flex justify-center items-center gap-1 rounded p-1 bg-light-gray text-dark-indigo font-bold"
+      className="w-full flex justify-center items-center gap-1 rounded p-1 bg-robin-egg-blue text-white font-bold"
     >
       {children}
     </button>

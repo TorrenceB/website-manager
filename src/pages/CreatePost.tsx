@@ -5,7 +5,7 @@ import { usePost, useTags } from "../hooks";
 
 const CreatePost = () => {
   const { post, setPost, createPost } = usePost();
-  const { tags, createTag, fetchTags } = useTags();
+  const { tags, fetchTags } = useTags();
 
   useEffect(() => {
     fetchTags();
@@ -16,8 +16,8 @@ const CreatePost = () => {
       post={post}
       tags={tags}
       setPost={setPost}
-      buttonContent={"Create Post"}
       postAction={createPost}
+      buttonContent="Create Post"
     />
   );
 };
