@@ -12,13 +12,16 @@ const CreatePost = () => {
   }, []);
 
   return (
-    <PostForm
-      post={post}
-      tags={tags}
-      setPost={setPost}
-      postAction={createPost}
-      buttonContent="Create Post"
-    />
+    <div className="flex flex-col gap-4 justify-center items-center">
+      <h1>Create Post</h1>
+      <PostForm
+        post={post}
+        tags={tags}
+        setPost={setPost}
+        postAction={createPost}
+        buttonContent="Create Post"
+      />
+    </div>
   );
 };
 

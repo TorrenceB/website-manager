@@ -1,4 +1,4 @@
-import { Editor } from "@bytemd/react";
+import { Editor, Viewer } from "@bytemd/react";
 
 import "bytemd/dist/index.css";
 

@@ -6,4 +6,3 @@ export { default as PostCard } from "./PostCard";
 export { default as Icon } from "./Icon";
 export { default as Chip } from "./Chip";
 export { default as PostForm } from "./PostForm";
-export { default as AddNewTag } from "./AddNewTag";

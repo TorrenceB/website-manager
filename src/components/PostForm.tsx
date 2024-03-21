@@ -63,7 +63,7 @@ const PostForm = ({
                   tags: post.tags.filter(({ id }) => tag.id !== id),
                 })
               }
-              color="bg-red-500"
+              color="bg-lavender-blush"
             />
           ))}
         </div>
@@ -103,17 +103,19 @@ const PostForm = ({
   );
 
   const createNewTag = (
-    <Button
-      onClick={(e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    <div className="w-1/4 ml-auto">
+      <Button
+        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault();
 
-        createTag(tag);
+          createTag(tag);
 
-        setTag({ ...tag, title: "" });
-      }}
-    >
-      Add Tag
-    </Button>
+          setTag({ ...tag, title: "" });
+        }}
+      >
+        Add Tag
+      </Button>
+    </div>
   );
 
   const markdown = (
@@ -127,7 +129,7 @@ const PostForm = ({
     <Chip
       key={tag.id}
       content={tag.title}
-      color="bg-deep-purple-gray"
+      color="bg-azure"
       onClick={() => handleTagClick(tag)}
     />
   ));
@@ -140,14 +142,19 @@ const PostForm = ({
   );
 
   return (
-    <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col gap-y-4 w-[50rem] rounded-md m-auto shadow-lg p-4"
+      onSubmit={handleSubmit}
+    >
       {title}
       <div className="flex items-end gap-x-2">{newTag}</div>
       {createNewTag}
       {allTags}
       {selectedTags}
       {markdown}
-      <Button>{buttonContent}</Button>
+      <div className="w-1/4 ml-auto">
+        <Button>{buttonContent}</Button>
+      </div>
     </form>
   );
 };

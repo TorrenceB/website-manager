@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Viewer } from "@bytemd/react";
 
 import { Button, Icon, Chip } from "./index";
 import { Icons } from "../assets/data";
@@ -13,7 +14,8 @@ interface Props {
 const PostCard = ({ post, onDelete }: Props) => {
   const { id, title, timestamp, body, tags } = post;
   const date = useFirebaseDate(timestamp);
-  const tagColor = (index: number) => {
+
+  const tagColor = (index: number): string => {
     if (index % 2) {
       return "bg-honeydew";
     } else if (index % 3) {
@@ -37,7 +39,9 @@ const PostCard = ({ post, onDelete }: Props) => {
       <div className="flex gap-2">{buildTags}</div>
       <h3 className="text-black">{title}</h3>
 
-      <p className="max-h-32 overflow-hidden">{body}</p>
+      <p className="max-h-32 overflow-hidden">
+        <Viewer value={body} />
+      </p>
       <p className="flex-end">{date}</p>
       <div className="flex gap-2">
         <Link to={`/update-post/${id}`} className="w-full">
