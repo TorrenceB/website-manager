@@ -12,6 +12,7 @@ interface Props {
   buttonContent: string;
   setPost: (post: Post) => void;
   postAction: (id: string) => Promise<void>;
+  onCreateTag: (tag: Tag) => void;
 }
 
 const PostForm = ({
@@ -20,9 +21,9 @@ const PostForm = ({
   buttonContent,
   postAction,
   setPost,
+  onCreateTag,
 }: Props) => {
   const [tag, setTag] = useState<Tag>({ id: "", title: "" });
-  const { createTag } = useTags();
   const navigate = useNavigate();
 
   const handleTagClick = (tag: Tag) => {
@@ -46,6 +47,21 @@ const PostForm = ({
     });
 
     navigate("/posts");
+  };
+
+  const isFormValid = (post: Post): boolean => {
+    const requiredKeys = ["title", "body", "tags"];
+    const isValid = requiredKeys.every((key) => {
+      const property = post[key as keyof Post];
+
+      if (Array.isArray(property)) {
+        return property.length > 0;
+      }
+
+      return property;
+    });
+
+    return isValid;
   };
 
   const selectedTags =
@@ -105,10 +121,11 @@ const PostForm = ({
   const createNewTag = (
     <div className="w-1/4 ml-auto">
       <Button
+        isDisabled={tag.title.length === 0}
         onClick={(e: MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
 
-          createTag(tag);
+          onCreateTag(tag);
 
           setTag({ ...tag, title: "" });
         }}
@@ -136,7 +153,11 @@ const PostForm = ({
 
   const allTags = (
     <div>
-      <h3>Available Tags</h3>
+      {tags && tags.length > 0 ? (
+        <h3>Available Tags</h3>
+      ) : (
+        <h3>No Available Tags</h3>
+      )}
       <div className="flex items-center flex-wrap gap-2">{chips}</div>
     </div>
   );
@@ -153,7 +174,7 @@ const PostForm = ({
       {selectedTags}
       {markdown}
       <div className="w-1/4 ml-auto">
-        <Button>{buttonContent}</Button>
+        <Button isDisabled={!isFormValid(post)}>{buttonContent}</Button>
       </div>
     </form>
   );

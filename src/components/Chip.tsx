@@ -35,7 +35,7 @@ const Chip = ({
     >
       <span className="m-auto flex items-center">
         {onDelete && (
-          <Icon icon={Icons["x-mark"]} onClick={onDelete} color="#000000" />
+          <Icon icon={Icons["x-mark"]} onClick={onDelete} color="#" />
         )}
         {content}
       </span>

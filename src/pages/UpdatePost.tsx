@@ -6,7 +6,7 @@ import { usePost, useTags } from "../hooks";
 
 const UpdatePost = () => {
   const { post, fetchPost, updatePost, setPost } = usePost();
-  const { tags, fetchTags } = useTags();
+  const { tags, fetchTags, createTag } = useTags();
   const { id = "" } = useParams<string>();
 
   useEffect(() => {
@@ -21,6 +21,7 @@ const UpdatePost = () => {
         post={post}
         tags={tags}
         setPost={setPost}
+        onCreateTag={createTag}
         postAction={() => updatePost(id)}
         buttonContent="Update Post"
       />
