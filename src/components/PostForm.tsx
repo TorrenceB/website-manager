@@ -1,9 +1,9 @@
 import { useState, ChangeEvent, MouseEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { Timestamp } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 import { Input, Markdown, Button, Chip } from "./index";
-import { useTags } from "../hooks";
 import { Tag, Post } from "../types";
 
 interface Props {
@@ -50,8 +50,9 @@ const PostForm = ({
   };
 
   const isFormValid = (post: Post): boolean => {
-    const requiredKeys = ["title", "body", "tags"];
-    const isValid = requiredKeys.every((key) => {
+    const keys = ["title", "body", "tags"];
+
+    return keys.every((key) => {
       const property = post[key as keyof Post];
 
       if (Array.isArray(property)) {
@@ -60,8 +61,6 @@ const PostForm = ({
 
       return property;
     });
-
-    return isValid;
   };
 
   const selectedTags =

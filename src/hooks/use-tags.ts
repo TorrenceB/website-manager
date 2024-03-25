@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import Client from "../api/client";
 import { Tag } from "../types";
@@ -27,6 +28,10 @@ const useTags = () => {
     };
 
     setTags([...(<[]>tags), newTag]);
+
+    toast.success(`${title} added!`, {
+      position: "bottom-center",
+    });
   };
 
   return {

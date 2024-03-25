@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Timestamp } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 import { Post } from "../types";
 import { posts } from "../plugins/firebase";
@@ -28,17 +29,21 @@ const usePost = () => {
       data: post,
     });
 
-    console.log("RESPONSE =>", response);
+    if (response) {
+      toast.success("Post created!");
+    }
   };
 
   const updatePost = async (id: string): Promise<void> => {
     await client.$mutate({ path: "posts", id, data: post });
+
+    toast.success(`Post ${id} updated!`);
   };
 
   const removePost = async (id: string): Promise<void> => {
     await client.$delete({ path: "posts", id });
 
-    await fetchPost(id);
+    toast.success(`Post ${id} deleted!`);
   };
 
   return {

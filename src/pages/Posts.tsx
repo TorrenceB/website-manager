@@ -7,11 +7,13 @@ import { posts } from "../plugins/firebase";
 
 import Client from "../api/client";
 import { Icons } from "../assets/data";
+import { usePost } from "../hooks";
 
 const client: Client = Client();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
+  const { removePost } = usePost();
 
   const fetch = async (): Promise<void> => {
     const data = (await client.$list(posts)) as Post[];
@@ -20,8 +22,7 @@ const Posts = () => {
   };
 
   const handleDelete = async (id: string): Promise<void> => {
-    await client.$delete({ path: "posts", id });
-
+    await removePost(id);
     await fetch();
   };
 
