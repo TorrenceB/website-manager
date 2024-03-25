@@ -39,9 +39,8 @@ const PostCard = ({ post, onDelete }: Props) => {
       <div className="flex gap-2">{buildTags}</div>
       <h3 className="text-black">{title}</h3>
 
-      <p className="max-h-32 overflow-hidden">
-        <Viewer value={body} />
-      </p>
+      <Viewer value={body} />
+
       <p className="flex-end">{date}</p>
       <div className="flex gap-2">
         <Link to={`/update-post/${id}`} className="w-full">

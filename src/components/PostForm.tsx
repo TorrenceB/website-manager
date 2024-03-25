@@ -1,7 +1,6 @@
 import { useState, ChangeEvent, MouseEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { Timestamp } from "firebase/firestore";
-import toast from "react-hot-toast";
 
 import { Input, Markdown, Button, Chip } from "./index";
 import { Tag, Post } from "../types";

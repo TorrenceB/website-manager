@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ReactLoading from "react-loading";
 
 import { Button, PostCard, Icon } from "../components";
 import { Post } from "../types";
@@ -13,12 +14,14 @@ const client: Client = Client();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
+  const [isFetchingPosts, setIsFetchingPosts] = useState(true);
   const { removePost } = usePost();
 
   const fetch = async (): Promise<void> => {
     const data = (await client.$list(posts)) as Post[];
 
     setBlogPosts(data);
+    setIsFetchingPosts(false);
   };
 
   const handleDelete = async (id: string): Promise<void> => {
@@ -54,7 +57,13 @@ const Posts = () => {
         </Link>
       </div>
 
-      <div className="md:grid md:grid-cols-4">{buildPosts}</div>
+      <div className="md:grid md:grid-cols-4">
+        {isFetchingPosts ? (
+          <ReactLoading type="bubbles" color="#00ccc5" />
+        ) : (
+          buildPosts
+        )}
+      </div>
     </div>
   );
 };
