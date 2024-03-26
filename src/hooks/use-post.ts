@@ -30,20 +30,26 @@ const usePost = () => {
     });
 
     if (response) {
-      toast.success("Post created!");
+      toast.success("Post created!", {
+        position: "bottom-center",
+      });
     }
   };
 
   const updatePost = async (id: string): Promise<void> => {
     await client.$mutate({ path: "posts", id, data: post });
 
-    toast.success(`Post ${id} updated!`);
+    toast.success(`Post ${id} updated!`, {
+      position: "bottom-center",
+    });
   };
 
   const removePost = async (id: string): Promise<void> => {
     await client.$delete({ path: "posts", id });
 
-    toast.success(`Post ${id} deleted!`);
+    toast.success(`Post ${id} deleted!`, {
+      position: "bottom-center",
+    });
   };
 
   return {
