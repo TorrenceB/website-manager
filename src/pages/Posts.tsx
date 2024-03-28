@@ -9,8 +9,10 @@ import { posts } from "../plugins/firebase";
 import Client from "../api/client";
 import { Icons } from "../assets/data";
 import { usePost } from "../hooks";
+import Auth from "../api/authentication";
 
 const client: Client = Client();
+const auth = Auth();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
@@ -27,6 +29,10 @@ const Posts = () => {
   const handleDelete = async (id: string): Promise<void> => {
     await removePost(id);
     await fetch();
+  };
+
+  const handleSignOut = async () => {
+    await auth.$signOut();
   };
 
   useEffect(() => {
@@ -63,6 +69,12 @@ const Posts = () => {
         ) : (
           buildPosts
         )}
+      </div>
+      <div className="w-40">
+        <Button onClick={handleSignOut}>
+          <Icon icon={Icons.minus} />
+          Sign Out
+        </Button>
       </div>
     </div>
   );
