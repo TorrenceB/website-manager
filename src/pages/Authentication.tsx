@@ -1,8 +1,10 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router";
+import ReactLoading from "react-loading";
 
-import { Input, Button } from "../components";
+import { Input, Button, Icon } from "../components";
 import Auth from "../api/authentication";
+import { Icons } from "../assets/data";
 
 const auth = Auth();
 
@@ -12,14 +14,19 @@ const Authentication = () => {
     email: "",
     password: "",
   });
+  const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    setIsSigningIn(true);
 
     const authUser = await auth.$signIn({
       email: user.email,
       password: user.password,
     });
+
+    setIsSigningIn(false);
 
     if (authUser) {
       navigate("/posts");
@@ -50,7 +57,19 @@ const Authentication = () => {
         />
 
         <div className="w-40">
-          <Button>Sign In</Button>
+          <Button>
+            {isSigningIn ? (
+              <ReactLoading
+                type="spinningBubbles"
+                height={"1.5rem"}
+                width={"1.5rem"}
+              />
+            ) : (
+              <>
+                Sign In <Icon icon={Icons["arrow-out-left"]} />
+              </>
+            )}
+          </Button>
         </div>
       </form>
     </div>

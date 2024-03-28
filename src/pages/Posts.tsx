@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
 
 import { Button, PostCard, Icon } from "../components";
@@ -18,6 +18,7 @@ const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
   const [isFetchingPosts, setIsFetchingPosts] = useState(true);
   const { removePost } = usePost();
+  const navigate = useNavigate();
 
   const fetch = async (): Promise<void> => {
     const data = (await client.$list(posts)) as Post[];
@@ -33,6 +34,8 @@ const Posts = () => {
 
   const handleSignOut = async () => {
     await auth.$signOut();
+
+    navigate("/auth");
   };
 
   useEffect(() => {
@@ -72,8 +75,8 @@ const Posts = () => {
       </div>
       <div className="w-40">
         <Button onClick={handleSignOut}>
-          <Icon icon={Icons.minus} />
           Sign Out
+          <Icon icon={Icons["arrow-out-right"]} />
         </Button>
       </div>
     </div>
