@@ -7,16 +7,18 @@ import { Post } from "../types";
 import { posts } from "../plugins/firebase";
 
 import Client from "../api/client";
+import Auth from "../api/authentication";
 import { Icons } from "../assets/data";
 import { usePost } from "../hooks";
-import Auth from "../api/authentication";
+import { useAuth } from "../context";
 
 const client: Client = Client();
-const auth = Auth();
+const authentication: Auth = Auth();
 
 const Posts = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
   const [isFetchingPosts, setIsFetchingPosts] = useState(true);
+  const { setAuth } = useAuth();
   const { removePost } = usePost();
   const navigate = useNavigate();
 
@@ -33,9 +35,10 @@ const Posts = () => {
   };
 
   const handleSignOut = async () => {
-    await auth.$signOut();
+    await authentication.$signOut();
 
-    navigate("/auth");
+    setAuth({ token: "", isAuthenticated: false });
+    navigate("/signin");
   };
 
   useEffect(() => {

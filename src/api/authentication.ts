@@ -13,7 +13,7 @@ interface Auth {
   }: {
     email: string;
     password: string;
-  }) => Promise<User>;
+  }) => Promise<{ user: User; token: string }>;
   $signOut: () => void;
 }
 
@@ -23,14 +23,13 @@ const Auth = (): Auth => ({
   $signIn: async ({ email, password }) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const token = await user.getIdToken();
 
-      if (user) {
-        console.log("User logged in =>", user);
-
+      if (token) {
         toast.success("Signed in successfully!", { position: "bottom-center" });
       }
 
-      return user;
+      return { user, token };
     } catch (error) {
       throw Error(`@authentication/functions.ts::Auth.$signIn ${error}`);
     }

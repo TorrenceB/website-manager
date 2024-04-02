@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { Posts, CreatePost, UpdatePost, Authentication } from "../pages";
+import { Posts, CreatePost, UpdatePost, SignIn } from "../pages";
 
 const posts = {
   path: "/posts",
@@ -14,11 +14,11 @@ const updatePost = {
   path: "/update-post/:id",
   element: <UpdatePost />,
 };
-const authentication = {
-  path: "/auth",
-  element: <Authentication />,
+const signIn = {
+  path: "/signin",
+  element: <SignIn />,
 };
 
-const routes = [posts, createPost, updatePost, authentication];
+const routes = [posts, createPost, updatePost, signIn];
 
 export default createBrowserRouter(routes);
