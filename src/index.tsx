@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 import router from "./router";
 import "./index.css";
-import { Authentication } from "./pages";
+import { AuthWrapper } from "./pages";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,9 +14,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Authentication>
+    <AuthWrapper>
       <RouterProvider router={router} />
       <Toaster />
-    </Authentication>
+    </AuthWrapper>
   </React.StrictMode>
 );

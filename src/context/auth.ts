@@ -4,7 +4,7 @@ import { Auth } from "../types";
 
 export const AuthContext = createContext<{
   auth: Auth;
-  setAuth: Dispatch<SetStateAction<Auth>>;
+  setAuth: (auth: Auth) => void;
 }>({
   auth: {
     token: "",

@@ -1,5 +1,4 @@
 import { useState, ReactElement } from "react";
-import { Navigate } from "react-router-dom";
 
 import { AuthContext } from "../context";
 import { Auth } from "../types";
@@ -7,12 +6,16 @@ import { Auth } from "../types";
 const Authentication = ({ children }: { children: ReactElement[] }) => {
   const [auth, setAuth] = useState<Auth>({ token: "", isAuthenticated: false });
 
+  const handleSetAuth = (auth: Auth) => {
+    localStorage.setItem("Authentication", JSON.stringify(auth));
+
+    setAuth(auth);
+  };
+
   return (
-    <>
-      <AuthContext.Provider value={{ auth, setAuth }}>
-        {auth.isAuthenticated ? children : <Navigate to="signin" />}
-      </AuthContext.Provider>
-    </>
+    <AuthContext.Provider value={{ auth, setAuth: handleSetAuth }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
