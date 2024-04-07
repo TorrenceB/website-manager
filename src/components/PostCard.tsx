@@ -3,7 +3,6 @@ import { Viewer } from "@bytemd/react";
 
 import { Button, Icon, Chip } from "./index";
 import { Icons } from "../assets/data";
-import { useFirebaseDate } from "../hooks";
 import { Post } from "../types";
 
 interface Props {
@@ -12,8 +11,7 @@ interface Props {
 }
 
 const PostCard = ({ post, onDelete }: Props) => {
-  const { id, title, timestamp, body, tags } = post;
-  const date = useFirebaseDate(timestamp);
+  const { id, title, date, body, tags } = post;
 
   const tagColor = (index: number): string => {
     if (index % 2) {
@@ -41,7 +39,7 @@ const PostCard = ({ post, onDelete }: Props) => {
 
       <Viewer value={body} />
 
-      <p className="flex-end">{date}</p>
+      <p className="flex-end">{`${date.toLocaleString()}`}</p>
       <div className="flex gap-2">
         <Link to={`/update-post/${id}`} className="w-full">
           <Button>

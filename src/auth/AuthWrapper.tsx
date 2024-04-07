@@ -3,7 +3,7 @@ import { useState, ReactElement } from "react";
 import { AuthContext } from "../context";
 import { Auth } from "../types";
 
-const Authentication = ({ children }: { children: ReactElement[] }) => {
+const AuthWrapper = ({ children }: { children: ReactElement[] }) => {
   const [auth, setAuth] = useState<Auth>({ token: "", isAuthenticated: false });
 
   const handleSetAuth = (auth: Auth) => {
@@ -19,4 +19,4 @@ const Authentication = ({ children }: { children: ReactElement[] }) => {
   );
 };
 
-export default Authentication;
+export default AuthWrapper;

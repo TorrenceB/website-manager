@@ -1,4 +1,4 @@
-import { createContext, useContext, SetStateAction, Dispatch } from "react";
+import { createContext, useContext } from "react";
 
 import { Auth } from "../types";
 

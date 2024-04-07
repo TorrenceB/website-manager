@@ -11,6 +11,7 @@ import Auth from "../api/authentication";
 import { Icons } from "../assets/data";
 import { usePost } from "../hooks";
 import { useAuth } from "../context";
+import { getDate } from "../utils/date-conversion";
 
 const client: Client = Client();
 const authentication: Auth = Auth();
@@ -47,13 +48,15 @@ const Posts = () => {
 
   const buildPosts =
     blogPosts && blogPosts?.length > 0
-      ? blogPosts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onDelete={() => handleDelete(post.id)}
-          />
-        ))
+      ? blogPosts.map((post) => {
+          return (
+            <PostCard
+              key={post.id}
+              post={{ ...post, date: getDate(post.date) }}
+              onDelete={() => handleDelete(post.id)}
+            />
+          );
+        })
       : "There are no posts";
 
   return (

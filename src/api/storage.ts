@@ -8,7 +8,7 @@ interface Storage {
 const storage = getStorage();
 
 const Storage = (): Storage => ({
-  $upload: async ({ path, file }) => {
+  $upload: async ({ path, file }: { path: string; file: File }) => {
     try {
       const storageRef = ref(storage, path);
 
@@ -17,7 +17,7 @@ const Storage = (): Storage => ({
       throw Error(`@storage.ts::Storage.$upload ${error}`);
     }
   },
-  $download: async (path = "") => {
+  $download: async (path: string) => {
     try {
       const storageRef = ref(storage, path);
       const url = await getDownloadURL(storageRef);

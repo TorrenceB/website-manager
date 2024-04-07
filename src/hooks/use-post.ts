@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 import { Post } from "../types";
 import { posts } from "../plugins/firebase";
+import { getDate } from "../utils/date-conversion";
 import Client from "../api/client";
 
 const client = Client();
@@ -14,7 +15,7 @@ const usePost = () => {
     title: "",
     body: "",
     tags: [],
-    timestamp: new Timestamp(0, 0),
+    date: new Date(),
   });
 
   const fetchPost = async (id: string): Promise<void> => {
@@ -26,7 +27,7 @@ const usePost = () => {
   const createPost = async (): Promise<void> => {
     const response = await client.$create({
       collection: posts,
-      data: post,
+      data: { ...post, date: getDate(post.date) },
     });
 
     if (response) {

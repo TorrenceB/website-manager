@@ -42,7 +42,7 @@ const PostForm = ({
       title: "",
       body: "",
       tags: [],
-      timestamp: new Timestamp(0, 0),
+      date: new Date(),
     });
 
     navigate("/posts");

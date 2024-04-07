@@ -6,5 +6,5 @@ export default interface Post {
   title: string;
   body: string;
   tags: Tag[];
-  timestamp: Timestamp;
+  date: Date | Timestamp;
 }
