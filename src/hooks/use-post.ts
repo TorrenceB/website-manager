@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Timestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 import { Post } from "../types";
 import { posts } from "../plugins/firebase";
-import { getDate } from "../utils/date-conversion";
+import { getDate } from "../utils/get-date";
 import Client from "../api/client";
 
 const client = Client();

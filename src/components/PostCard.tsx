@@ -4,6 +4,7 @@ import { Viewer } from "@bytemd/react";
 import { Button, Icon, Chip } from "./index";
 import { Icons } from "../assets/data";
 import { Post } from "../types";
+import { isTimestamp } from "../utils/get-date";
 
 interface Props {
   post: Post;
@@ -27,6 +28,8 @@ const PostCard = ({ post, onDelete }: Props) => {
     <Chip key={tag.id} content={tag.title} color={tagColor(index)} />
   ));
 
+  const formatDate = !isTimestamp(date) && date.toDateString();
+
   return (
     <div className="flex flex-col justify-between rounded-md p-4 h-[30rem] w-96 shadow-lg text-black transition-all">
       <img
@@ -39,7 +42,7 @@ const PostCard = ({ post, onDelete }: Props) => {
 
       <Viewer value={body} />
 
-      <p className="flex-end">{`${date.toLocaleString()}`}</p>
+      <p className="flex-end">{formatDate}</p>
       <div className="flex gap-2">
         <Link to={`/update-post/${id}`} className="w-full">
           <Button>

@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export const isTimestamp = (date: Timestamp | Date): date is Timestamp =>
-  (date as Timestamp) !== undefined;
+  (date as Timestamp).toDate !== undefined;
 
 export const getDate = (date: Timestamp | Date) => {
   if (isTimestamp(date)) {

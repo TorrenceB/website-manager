@@ -11,7 +11,7 @@ import Auth from "../api/authentication";
 import { Icons } from "../assets/data";
 import { usePost } from "../hooks";
 import { useAuth } from "../context";
-import { getDate } from "../utils/date-conversion";
+import { getDate } from "../utils/get-date";
 
 const client: Client = Client();
 const authentication: Auth = Auth();
