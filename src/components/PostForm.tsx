@@ -41,6 +41,7 @@ const PostForm = ({
       id: "",
       title: "",
       body: "",
+      image: "",
       tags: [],
       date: new Date(),
     });

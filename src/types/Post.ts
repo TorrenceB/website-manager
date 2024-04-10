@@ -5,6 +5,7 @@ export default interface Post {
   id: string;
   title: string;
   body: string;
+  image: string;
   tags: Tag[];
   date: Date | Timestamp;
 }

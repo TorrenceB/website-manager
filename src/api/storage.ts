@@ -1,14 +1,21 @@
 import { getDownloadURL, uploadBytes, getStorage, ref } from "firebase/storage";
 
+import "../plugins/firebase";
+
+interface Upload {
+  file: File;
+  path: string;
+}
+
 interface Storage {
-  $upload: ({ file, path }: { file: File; path: string }) => void;
-  $download: (url: string) => void;
+  $upload: ({ file, path }: Upload) => void;
+  $download: (path: string) => Promise<string>;
 }
 
 const storage = getStorage();
 
 const Storage = (): Storage => ({
-  $upload: async ({ path, file }: { path: string; file: File }) => {
+  $upload: async ({ path, file }: Upload) => {
     try {
       const storageRef = ref(storage, path);
 
