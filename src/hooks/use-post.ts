@@ -25,6 +25,11 @@ const usePost = () => {
   };
 
   const createPost = async (): Promise<void> => {
+    /**
+     * @todo - add "isOk" property to response and
+     * replace if block condition ?
+     *
+     * */
     const response = await client.$create({
       collection: posts,
       data: { ...post, date: getDate(post.date) },

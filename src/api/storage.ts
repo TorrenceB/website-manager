@@ -1,4 +1,10 @@
-import { getDownloadURL, uploadBytes, getStorage, ref } from "firebase/storage";
+import {
+  getDownloadURL,
+  uploadBytes,
+  getStorage,
+  ref,
+  StorageReference,
+} from "firebase/storage";
 
 import "../plugins/firebase";
 
@@ -17,7 +23,7 @@ const storage = getStorage();
 const Storage = (): Storage => ({
   $upload: async ({ path, file }: Upload) => {
     try {
-      const storageRef = ref(storage, path);
+      const storageRef: StorageReference = ref(storage, path);
 
       await uploadBytes(storageRef, file);
     } catch (error) {
@@ -26,8 +32,8 @@ const Storage = (): Storage => ({
   },
   $download: async (path: string) => {
     try {
-      const storageRef = ref(storage, path);
-      const url = await getDownloadURL(storageRef);
+      const storageRef: StorageReference = ref(storage, path);
+      const url: string = await getDownloadURL(storageRef);
 
       return url;
     } catch (error) {

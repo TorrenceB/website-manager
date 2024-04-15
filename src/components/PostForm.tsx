@@ -1,9 +1,13 @@
-import { useState, ChangeEvent, MouseEvent, FormEvent } from "react";
+import { useState, useRef, ChangeEvent, MouseEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
-import { Timestamp } from "firebase/firestore";
 
-import { Input, Markdown, Button, Chip } from "./index";
+import { Input, Markdown, Button, Chip, Icon } from "./index";
 import { Tag, Post } from "../types";
+import Storage from "../api/storage";
+import toast from "react-hot-toast";
+import { Icons } from "../assets/data";
+
+const storage = Storage();
 
 interface Props {
   post: Post;
@@ -23,6 +27,8 @@ const PostForm = ({
   onCreateTag,
 }: Props) => {
   const [tag, setTag] = useState<Tag>({ id: "", title: "" });
+  const [image, setImage] = useState<File>();
+  const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleTagClick = (tag: Tag) => {
@@ -32,8 +38,10 @@ const PostForm = ({
     if (tagDoesntExist) setPost({ ...post, tags });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // await storage.$upload({ path: image.name, file: image });
 
     postAction("");
 
@@ -61,6 +69,20 @@ const PostForm = ({
 
       return property;
     });
+  };
+
+  const handleSelectImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+
+    if (files) {
+      const image = files[0];
+
+      setImage(image);
+
+      if (image) {
+        toast.success(`${image.name} uploaded!`, { position: "bottom-center" });
+      }
+    }
   };
 
   const selectedTags =
@@ -103,18 +125,20 @@ const PostForm = ({
   );
 
   const newTag = (
-    <Input
-      id="newTag"
-      name="newTag"
-      label="Add New Tag"
-      type="text"
-      value={tag.title}
-      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
+    <div className="flex items-end gap-x-2">
+      <Input
+        id="newTag"
+        name="newTag"
+        label="Add New Tag"
+        type="text"
+        value={tag.title}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const { value } = e.target;
 
-        setTag({ ...tag, title: value });
-      }}
-    />
+          setTag({ ...tag, title: value });
+        }}
+      />
+    </div>
   );
 
   const createNewTag = (
@@ -150,6 +174,52 @@ const PostForm = ({
     />
   ));
 
+  const uploadImage = (
+    <>
+      <label>Upload Image</label>
+      <div className="bg-gray-200 rounded-md flex flex-col justify-center items-center p-4 gap-4">
+        <Icon icon={Icons.upload} size="w-10 h-10" color="#00ccc5" />
+        <p className="text-xs font-bold">Choose file to upload from device</p>
+        <div className="w-1/4">
+          <Button
+            onClick={(e: MouseEvent) => {
+              e.preventDefault();
+
+              fileRef.current?.click();
+            }}
+          >
+            Select Image
+          </Button>
+        </div>
+      </div>
+      <div>
+        <Input
+          id="image"
+          type="file"
+          innerRef={fileRef}
+          onChange={handleSelectImage}
+        />
+      </div>
+    </>
+  );
+
+  const uploadedImages = image ? (
+    <div className="flex flex-col gap-4">
+      <div className="bg-gray-200 rounded-md p-4 flex items-center gap-4">
+        <Icon icon={Icons.image} size="w-8 h-8" color="#000" />
+        <h3>{image.name}</h3>
+        <Icon
+          icon={Icons["x-mark"]}
+          size="w-8 h-8"
+          color="#000"
+          className="ml-auto"
+          onClick={() => setImage(undefined)}
+        />
+      </div>
+    </div>
+  ) : (
+    <></>
+  );
   const allTags = (
     <div>
       {tags && tags.length > 0 ? (
@@ -161,20 +231,26 @@ const PostForm = ({
     </div>
   );
 
+  const submitButton = (
+    <div className="w-1/4 ml-auto">
+      <Button isDisabled={!isFormValid(post)}>{buttonContent}</Button>
+    </div>
+  );
+
   return (
     <form
       className="flex flex-col gap-y-4 w-[50rem] rounded-md m-auto shadow-lg p-4"
       onSubmit={handleSubmit}
     >
       {title}
-      <div className="flex items-end gap-x-2">{newTag}</div>
+      {newTag}
       {createNewTag}
       {allTags}
       {selectedTags}
+      {uploadImage}
+      {uploadedImages}
       {markdown}
-      <div className="w-1/4 ml-auto">
-        <Button isDisabled={!isFormValid(post)}>{buttonContent}</Button>
-      </div>
+      {submitButton}
     </form>
   );
 };
