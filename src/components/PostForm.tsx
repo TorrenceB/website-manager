@@ -28,7 +28,7 @@ const PostForm = ({
 }: Props) => {
   const [tag, setTag] = useState<Tag>({ id: "", title: "" });
   const [image, setImage] = useState<File>();
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
   const handleTagClick = (tag: Tag) => {
@@ -41,7 +41,11 @@ const PostForm = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // await storage.$upload({ path: image.name, file: image });
+    /* keep selected image in state and 
+       submit to storage on form submission */
+    if (image) {
+      await storage.$upload({ path: image.name, file: image });
+    }
 
     postAction("");
 
@@ -57,8 +61,17 @@ const PostForm = ({
     navigate("/posts");
   };
 
+  /**
+   * @function isFormValid
+   * @description handles form validation by checking if form fields
+   * "title", "body", and "tags" are defined.
+   *
+   * @param { Post } post
+   *
+   * @returns { boolean }
+   */
   const isFormValid = (post: Post): boolean => {
-    const keys = ["title", "body", "tags"];
+    const keys: string[] = ["title", "body", "tags"];
 
     return keys.every((key) => {
       const property = post[key as keyof Post];
@@ -78,6 +91,7 @@ const PostForm = ({
       const image = files[0];
 
       setImage(image);
+      setPost({ ...post, image: image.name });
 
       if (image) {
         toast.success(`${image.name} uploaded!`, { position: "bottom-center" });
@@ -88,7 +102,7 @@ const PostForm = ({
   const selectedTags =
     post.tags && post.tags.length > 0 ? (
       <div>
-        <h3>Selected Tags</h3>
+        <label>Selected Tags</label>
         <div className="flex w-full gap-2">
           {post.tags.map((tag) => (
             <Chip
@@ -106,7 +120,7 @@ const PostForm = ({
         </div>
       </div>
     ) : (
-      <h3>No Selected Tags</h3>
+      <label>No Selected Tags</label>
     );
 
   const title = (
@@ -174,36 +188,7 @@ const PostForm = ({
     />
   ));
 
-  const uploadImage = (
-    <>
-      <label>Upload Image</label>
-      <div className="bg-gray-200 rounded-md flex flex-col justify-center items-center p-4 gap-4">
-        <Icon icon={Icons.upload} size="w-10 h-10" color="#00ccc5" />
-        <p className="text-xs font-bold">Choose file to upload from device</p>
-        <div className="w-1/4">
-          <Button
-            onClick={(e: MouseEvent) => {
-              e.preventDefault();
-
-              fileRef.current?.click();
-            }}
-          >
-            Select Image
-          </Button>
-        </div>
-      </div>
-      <div>
-        <Input
-          id="image"
-          type="file"
-          innerRef={fileRef}
-          onChange={handleSelectImage}
-        />
-      </div>
-    </>
-  );
-
-  const uploadedImages = image ? (
+  const uploadedImage = image && (
     <div className="flex flex-col gap-4">
       <div className="bg-gray-200 rounded-md p-4 flex items-center gap-4">
         <Icon icon={Icons.image} size="w-8 h-8" color="#000" />
@@ -213,19 +198,64 @@ const PostForm = ({
           size="w-8 h-8"
           color="#000"
           className="ml-auto"
-          onClick={() => setImage(undefined)}
+          onClick={() => {
+            if (fileRef.current) {
+              fileRef.current.value = "";
+            }
+
+            setImage(undefined);
+            setPost({ ...post, image: "" });
+          }}
         />
       </div>
     </div>
-  ) : (
-    <></>
   );
+
+  const uploadImage = (
+    <>
+      <label>Upload Image</label>
+
+      {!image ? (
+        <>
+          <div className="bg-gray-200 rounded-md flex flex-col justify-center items-center p-4 gap-4">
+            <Icon icon={Icons.upload} size="w-10 h-10" color="#00ccc5" />
+            <p className="text-xs font-bold">
+              Choose file to upload from device
+            </p>
+            <div className="w-1/4">
+              <Button
+                onClick={(e: MouseEvent) => {
+                  e.preventDefault();
+
+                  fileRef.current?.click();
+                }}
+                isDisabled={image !== undefined}
+              >
+                Select Image
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Input
+              id="image"
+              type="file"
+              innerRef={fileRef}
+              onChange={handleSelectImage}
+            />
+          </div>
+        </>
+      ) : (
+        uploadedImage
+      )}
+    </>
+  );
+
   const allTags = (
     <div>
       {tags && tags.length > 0 ? (
-        <h3>Available Tags</h3>
+        <label>Available Tags</label>
       ) : (
-        <h3>No Available Tags</h3>
+        <label>No Available Tags</label>
       )}
       <div className="flex items-center flex-wrap gap-2">{chips}</div>
     </div>
@@ -237,18 +267,17 @@ const PostForm = ({
     </div>
   );
 
+  const formClasses =
+    "flex flex-col gap-y-4 w-[50rem] rounded-md m-auto shadow-lg p-4";
+
   return (
-    <form
-      className="flex flex-col gap-y-4 w-[50rem] rounded-md m-auto shadow-lg p-4"
-      onSubmit={handleSubmit}
-    >
+    <form className={formClasses} onSubmit={handleSubmit}>
       {title}
       {newTag}
       {createNewTag}
       {allTags}
       {selectedTags}
       {uploadImage}
-      {uploadedImages}
       {markdown}
       {submitButton}
     </form>
